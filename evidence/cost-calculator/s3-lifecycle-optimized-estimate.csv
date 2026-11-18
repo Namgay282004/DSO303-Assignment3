@@ -1,0 +1,15 @@
+﻿Estimate summary
+Upfront cost,Monthly cost,Total 12 months cost,Currency
+0,0.68,8.16,USD
+,,* Includes upfront cost
+
+
+Detailed Estimate
+Group hierarchy,Region,Description,Service,Upfront,Monthly,First 12 months total,Currency,Status,Configuration summary
+s3-lifecycle-optimized-estimateate,Asia Pacific (Singapore),,S3 Standard,0,0.51,6.12,USD,,"S3 Standard storage (20 GB per month), PUT, COPY, POST, LIST requests to S3 Standard (1000), GET, SELECT, and all other requests from S3 Standard (10000), Data returned by S3 Select (0 GB per month), Data scanned by S3 Select (0 GB per month)"
+s3-lifecycle-optimized-estimateate,Asia Pacific (Singapore),,S3 Glacier Deep Archive,0,0.17,2.04,USD,,"S3 Glacier Deep Archive Average Object Size (16 MB), S3 Glacier Deep Archive storage (80 GB per month), PUT, COPY, POST, LIST requests to S3 Glacier Deep Archive (0), Lifecycle Transitions into S3 Glacier Deep Archive (100), Restore requests (Standard) (0), Restore requests (Bulk) (0), Data retrievals (Standard) (0 GB per month), Data retrievals (Bulk) (0 GB per month)"
+
+
+
+Acknowledgement
+"* AWS Pricing Calculator provides only an estimate of your AWS fees and doesn't include any taxes that might apply. Your actual fees depend on a variety of factors, including your actual usage of AWS services."

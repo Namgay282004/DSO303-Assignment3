@@ -1,0 +1,175 @@
+data.aws_region.current: Reading...
+aws_iam_openid_connect_provider.github: Refreshing state... [id=arn:aws:iam::363242104805:oidc-provider/token.actions.githubusercontent.com]
+data.aws_availability_zones.available: Reading...
+aws_vpc.main: Refreshing state... [id=vpc-013a436d8aa50efe8]
+aws_ecr_repository.backend: Refreshing state... [id=dso303-assignment2-backend]
+aws_iam_role.api: Refreshing state... [id=DSO303-Assignment2-API-Role]
+aws_cloudfront_origin_access_control.frontend: Refreshing state... [id=EFWY7MXTCFNUF]
+aws_s3_bucket.assignments: Refreshing state... [id=dso303-assignment2-submissions-5231b85cb5e320f34b50904a18]
+aws_s3_bucket.frontend: Refreshing state... [id=dso303-assignment2-frontend-1fa3e2f1d082839fb5cb8081f3]
+data.aws_region.current: Read complete after 0s [id=ap-south-1]
+aws_sqs_queue.marking_dlq: Refreshing state... [id=https://sqs.ap-south-1.amazonaws.com/363242104805/DSO303-Assignment2-Marking-DLQ]
+data.aws_ami.amazon_linux_2023: Reading...
+data.aws_availability_zones.available: Read complete after 0s [id=ap-south-1]
+aws_iam_role.worker: Refreshing state... [id=DSO303-Assignment2-Worker-Role]
+aws_eip.nat_b[0]: Refreshing state... [id=eipalloc-02a481b659828a738]
+aws_eip.nat_a[0]: Refreshing state... [id=eipalloc-0e5a9af521d584d48]
+data.aws_ami.amazon_linux_2023: Read complete after 1s [id=ami-023dad608d2a5e5b8]
+aws_sqs_queue.marking: Refreshing state... [id=https://sqs.ap-south-1.amazonaws.com/363242104805/DSO303-Assignment2-Marking-Jobs]
+aws_ecr_lifecycle_policy.backend: Refreshing state... [id=dso303-assignment2-backend]
+aws_iam_role.github_deploy: Refreshing state... [id=DSO303-Assignment2-GitHub-Deploy-Role]
+aws_route_table.database: Refreshing state... [id=rtb-0e95cd84edf894268]
+aws_internet_gateway.main: Refreshing state... [id=igw-053aed94ac53db899]
+aws_route_table.private_app: Refreshing state... [id=rtb-00c228cbc69695a70]
+aws_security_group.api: Refreshing state... [id=sg-0f38a62a4d305b35a]
+aws_route_table.private_app_b: Refreshing state... [id=rtb-0eb991f714ce0b997]
+aws_subnet.private_app_a: Refreshing state... [id=subnet-06c7691d9e27f9e87]
+aws_subnet.public_a: Refreshing state... [id=subnet-076a638c1f5525c41]
+aws_security_group.database: Refreshing state... [id=sg-0ec931238e7099696]
+aws_security_group.alb: Refreshing state... [id=sg-08aa84a9e5a39085f]
+aws_subnet.database_b: Refreshing state... [id=subnet-004d18ed4ce807748]
+aws_subnet.database_a: Refreshing state... [id=subnet-00f66c880c7ee3c67]
+aws_security_group.worker: Refreshing state... [id=sg-00196de0cf6ac9ff5]
+aws_subnet.public_b: Refreshing state... [id=subnet-03d7b2163692f715f]
+aws_lb_target_group.api: Refreshing state... [id=arn:aws:elasticloadbalancing:ap-south-1:363242104805:targetgroup/dso303-api-targets/6658131129f3c94f]
+aws_subnet.private_app_b: Refreshing state... [id=subnet-010bd501c4d17262e]
+aws_vpc_security_group_egress_rule.api_https: Refreshing state... [id=sgr-0ff2412de9bb8da57]
+aws_route_table.public: Refreshing state... [id=rtb-0c215c206d6b5bd94]
+aws_vpc_security_group_ingress_rule.alb_http: Refreshing state... [id=sgr-0733bfdeebb3a8f49]
+aws_vpc_security_group_egress_rule.alb_to_api: Refreshing state... [id=sgr-03530c64dd258c4b0]
+aws_vpc_security_group_ingress_rule.alb_https: Refreshing state... [id=sgr-0e85039e4db5fd082]
+aws_vpc_security_group_ingress_rule.api_from_alb: Refreshing state... [id=sgr-07322c1f5842eef0b]
+aws_vpc_security_group_egress_rule.api_to_db: Refreshing state... [id=sgr-0cebbeb730a777668]
+aws_vpc_security_group_ingress_rule.db_from_api: Refreshing state... [id=sgr-01f20caa7baf3929c]
+aws_route_table_association.private_app_a: Refreshing state... [id=rtbassoc-04d0eb18c321093a1]
+aws_route_table_association.database_b: Refreshing state... [id=rtbassoc-088db6291901352fc]
+aws_nat_gateway.nat_a[0]: Refreshing state... [id=nat-06d912b7e6e737aa0]
+aws_iam_instance_profile.worker: Refreshing state... [id=DSO303-Assignment2-Worker-Profile]
+aws_iam_instance_profile.api: Refreshing state... [id=DSO303-Assignment2-API-Profile]
+aws_iam_role_policy_attachment.api_ssm: Refreshing state... [id=DSO303-Assignment2-API-Role/arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore]
+aws_iam_role_policy_attachment.api_ecr_read: Refreshing state... [id=DSO303-Assignment2-API-Role/arn:aws:iam::aws:policy/AmazonEC2ContainerRegistryPullOnly]
+aws_vpc_security_group_egress_rule.worker_https: Refreshing state... [id=sgr-0f740bffe38a22aac]
+aws_vpc_security_group_ingress_rule.db_from_worker: Refreshing state... [id=sgr-058ac258f9e7673c0]
+aws_vpc_security_group_egress_rule.worker_to_db: Refreshing state... [id=sgr-0febccf7cf5d0504d]
+aws_route_table_association.database_a: Refreshing state... [id=rtbassoc-03538e43dbb3d23bb]
+aws_db_subnet_group.main: Refreshing state... [id=dso303-assignment2-db-subnets]
+aws_route_table_association.private_app_b: Refreshing state... [id=rtbassoc-0b96752920c3faa31]
+aws_lb.api: Refreshing state... [id=arn:aws:elasticloadbalancing:ap-south-1:363242104805:loadbalancer/app/dso303-assignment2-alb/32e66fbd0d7791a6]
+aws_nat_gateway.nat_b[0]: Refreshing state... [id=nat-0b1807fde90876c8e]
+aws_route_table_association.public_a: Refreshing state... [id=rtbassoc-0ca8fdc6d307c4a7a]
+aws_route_table_association.public_b: Refreshing state... [id=rtbassoc-0a0b82936a57264e0]
+aws_s3_bucket_public_access_block.assignments: Refreshing state... [id=dso303-assignment2-submissions-5231b85cb5e320f34b50904a18]
+aws_s3_bucket_public_access_block.frontend: Refreshing state... [id=dso303-assignment2-frontend-1fa3e2f1d082839fb5cb8081f3]
+aws_s3_bucket_server_side_encryption_configuration.assignments: Refreshing state... [id=dso303-assignment2-submissions-5231b85cb5e320f34b50904a18]
+aws_iam_role_policy.worker: Refreshing state... [id=DSO303-Assignment2-Worker-Role:DSO303-Worker-Policy]
+aws_s3_bucket_server_side_encryption_configuration.frontend: Refreshing state... [id=dso303-assignment2-frontend-1fa3e2f1d082839fb5cb8081f3]
+aws_iam_role_policy.api: Refreshing state... [id=DSO303-Assignment2-API-Role:DSO303-API-Policy]
+aws_route.private_nat_a[0]: Refreshing state... [id=r-rtb-00c228cbc69695a701080289494]
+aws_route.private_nat_b[0]: Refreshing state... [id=r-rtb-0eb991f714ce0b9971080289494]
+aws_iam_role_policy.github_ecr_push: Refreshing state... [id=DSO303-Assignment2-GitHub-Deploy-Role:DSO303-GitHub-ECR-Push]
+aws_lb_listener.http: Refreshing state... [id=arn:aws:elasticloadbalancing:ap-south-1:363242104805:listener/app/dso303-assignment2-alb/32e66fbd0d7791a6/4b8e7f88b59979a8]
+aws_cloudfront_distribution.frontend: Refreshing state... [id=E3E7F6F5DIIBWL]
+aws_db_instance.postgres: Refreshing state... [id=db-QMFLGT4UOGN3N25DQTEP5J7HSE]
+aws_iam_role_policy.api_db_secret: Refreshing state... [id=DSO303-Assignment2-API-Role:DSO303-API-Database-Secret-Policy]
+aws_launch_template.api: Refreshing state... [id=lt-06f9198688dbb4965]
+aws_autoscaling_group.api: Refreshing state... [id=dso303-api-asg-acb974fe53b8c1e13ea2c83c3e]
+aws_iam_role_policy.github_frontend_deploy: Refreshing state... [id=DSO303-Assignment2-GitHub-Deploy-Role:DSO303-GitHub-Frontend-Deploy]
+aws_s3_bucket_policy.frontend: Refreshing state... [id=dso303-assignment2-frontend-1fa3e2f1d082839fb5cb8081f3]
+aws_iam_role_policy.github_asg_refresh: Refreshing state... [id=DSO303-Assignment2-GitHub-Deploy-Role:DSO303-GitHub-ASG-Refresh]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  ~ update in-place
+
+Terraform will perform the following actions:
+
+  # aws_autoscaling_group.api will be updated in-place
+  ~ resource "aws_autoscaling_group" "api" {
+        id                               = "dso303-api-asg-acb974fe53b8c1e13ea2c83c3e"
+        name                             = "dso303-api-asg-acb974fe53b8c1e13ea2c83c3e"
+        # (28 unchanged attributes hidden)
+
+      ~ launch_template {
+            id      = "lt-06f9198688dbb4965"
+            name    = "dso303-api-851348fab2ba9c8bdd06b13436"
+          ~ version = "1" -> (known after apply)
+        }
+
+        # (7 unchanged blocks hidden)
+    }
+
+  # aws_iam_role_policy.api will be updated in-place
+  ~ resource "aws_iam_role_policy" "api" {
+        id     = "DSO303-Assignment2-API-Role:DSO303-API-Policy"
+        name   = "DSO303-API-Policy"
+      ~ policy = jsonencode(
+          ~ {
+              ~ Statement = [
+                    {
+                        Action   = [
+                            "sqs:SendMessage",
+                        ]
+                        Effect   = "Allow"
+                        Resource = "arn:aws:sqs:ap-south-1:363242104805:DSO303-Assignment2-Marking-Jobs"
+                    },
+                  ~ {
+                      ~ Action   = [
+                            "s3:GetObject",
+                          + "s3:PutObject",
+                          + "s3:DeleteObject",
+                        ]
+                        # (2 unchanged attributes hidden)
+                    },
+                ]
+                # (1 unchanged attribute hidden)
+            }
+        )
+        # (1 unchanged attribute hidden)
+    }
+
+  # aws_launch_template.api will be updated in-place
+  ~ resource "aws_launch_template" "api" {
+        id                      = "lt-06f9198688dbb4965"
+      ~ latest_version          = 1 -> (known after apply)
+        name                    = "dso303-api-851348fab2ba9c8bdd06b13436"
+        tags                    = {
+            "Name" = "DSO303-API-Launch-Template"
+        }
+      ~ user_data               = "IyEvYmluL2Jhc2gKc2V0IC1ldW8gcGlwZWZhaWwKCmV4ZWMgPiA+KHRlZSAvdmFyL2xvZy9kc28zMDMtYm9vdHN0cmFwLmxvZyB8IGxvZ2dlciAtdCBkc28zMDMtYm9vdHN0cmFwKSAyPiYxCgplY2hvICJTdGFydGluZyBEU08zMDMgYmFja2VuZCBkZXBsb3ltZW50IgoKUkVHSU9OPSJhcC1zb3V0aC0xIgpFQ1JfUkVQT1NJVE9SWT0iMzYzMjQyMTA0ODA1LmRrci5lY3IuYXAtc291dGgtMS5hbWF6b25hd3MuY29tL2RzbzMwMy1hc3NpZ25tZW50Mi1iYWNrZW5kIgpEQl9IT1NUPSJkc28zMDMtYXNzaWdubWVudDItcG9zdGdyZXMuY2ZpYzJpZXNlamhyLmFwLXNvdXRoLTEucmRzLmFtYXpvbmF3cy5jb20iCkRCX1NFQ1JFVF9BUk49ImFybjphd3M6c2VjcmV0c21hbmFnZXI6YXAtc291dGgtMTozNjMyNDIxMDQ4MDU6c2VjcmV0OnJkcyFkYi03OTRiZWY2ZC03OWIyLTQ4YWEtYWZhNi04M2NkMDU4ZTU1ZDEtS1AzcmZsIgoKIyBJbnN0YWxsIERvY2tlciBhbmQgQVdTIENMSS4KIyBSZXF1aXJlcyBvdXRib3VuZCBjb25uZWN0aXZpdHkgdGhyb3VnaCBOQVQuCmRuZiBpbnN0YWxsIC15IGRvY2tlciBhd3NjbGkganEKCnN5c3RlbWN0bCBlbmFibGUgLS1ub3cgZG9ja2VyCgojIFJldHJpZXZlIHRoZSBSRFMtbWFuYWdlZCBjcmVkZW50aWFscy4KIyBOZXZlciBwcmludCB0aGUgc2VjcmV0IHRvIHRoZSBib290c3RyYXAgbG9nLgpzZXQgK3gKREJfU0VDUkVUPSQoYXdzIHNlY3JldHNtYW5hZ2VyIGdldC1zZWNyZXQtdmFsdWUgXAogIC0tcmVnaW9uICIkUkVHSU9OIiBcCiAgLS1zZWNyZXQtaWQgIiREQl9TRUNSRVRfQVJOIiBcCiAgLS1xdWVyeSBTZWNyZXRTdHJpbmcgXAogIC0tb3V0cHV0IHRleHQpCgpEQl9VU0VSPSQocHJpbnRmICclcycgIiREQl9TRUNSRVQiIHwganEgLXIgJy51c2VybmFtZScpCkRCX1BBU1NXT1JEPSQocHJpbnRmICclcycgIiREQl9TRUNSRVQiIHwganEgLXIgJy5wYXNzd29yZCcpCnVuc2V0IERCX1NFQ1JFVAoKIyBDcmVhdGUgYW4gZW52aXJvbm1lbnQgZmlsZSB3aXRoIHJlc3RyaWN0ZWQgcGVybWlzc2lvbnMuCmluc3RhbGwgLWQgLW0gNzAwIC9ldGMvZHNvMzAzCgpFTlZfRklMRT0iL2V0Yy9kc28zMDMvYmFja2VuZC5lbnYiCgpwcmludGYgJ05PREVfRU5WPXByb2R1Y3Rpb25cblBPUlQ9MzAwMFxuREJfSE9TVD0lc1xuREJfUE9SVD01NDMyXG5EQl9VU0VSPSVzXG5EQl9OQU1FPWRzbzMwM1xuJyBcCiAgIiREQl9IT1NUIiAiJERCX1VTRVIiID4gIiRFTlZfRklMRSIKCiMgQXBwZW5kIHRoZSBwYXNzd29yZCB3aXRob3V0IGV4cG9zaW5nIGl0IGluIFRlcnJhZm9ybS4KcHJpbnRmICdEQl9QQVNTV09SRD0lc1xuJyAiJERCX1BBU1NXT1JEIiA+PiAiJEVOVl9GSUxFIgpjaG1vZCA2MDAgIiRFTlZfRklMRSIKdW5zZXQgREJfUEFTU1dPUkQKCiMgQXV0aGVudGljYXRlIERvY2tlciB0byBBbWF6b24gRUNSLgphd3MgZWNyIGdldC1sb2dpbi1wYXNzd29yZCAtLXJlZ2lvbiAiJFJFR0lPTiIgXAogIHwgZG9ja2VyIGxvZ2luIFwKICAgICAgLS11c2VybmFtZSBBV1MgXAogICAgICAtLXBhc3N3b3JkLXN0ZGluIFwKICAgICAgIiQoZWNobyAiJEVDUl9SRVBPU0lUT1JZIiB8IGN1dCAtZC8gLWYxKSIKCiMgRG93bmxvYWQgdGhlIHB1Ymxpc2hlZCBiYWNrZW5kIGltYWdlLgpkb2NrZXIgcHVsbCAiJEVDUl9SRVBPU0lUT1JZOmxhdGVzdCIKCiMgU3RhcnQgdGhlIGFjdHVhbCBOb2RlLmpzIGJhY2tlbmQuCmRvY2tlciBydW4gLWQgXAogIC0tbmFtZSBkc28zMDMtYmFja2VuZCBcCiAgLS1yZXN0YXJ0IHVubGVzcy1zdG9wcGVkIFwKICAtLWVudi1maWxlICIkRU5WX0ZJTEUiIFwKICAtcCAzMDAwOjMwMDAgXAogICIkRUNSX1JFUE9TSVRPUlk6bGF0ZXN0IgoKZWNobyAiRFNPMzAzIGJhY2tlbmQgY29udGFpbmVyIHN0YXJ0ZWQiCg==" -> "IyEvYmluL2Jhc2gKc2V0IC1ldW8gcGlwZWZhaWwKCmV4ZWMgPiA+KHRlZSAvdmFyL2xvZy9kc28zMDMtYm9vdHN0cmFwLmxvZyB8IGxvZ2dlciAtdCBkc28zMDMtYm9vdHN0cmFwKSAyPiYxCgplY2hvICJTdGFydGluZyBEU08zMDMgYmFja2VuZCBkZXBsb3ltZW50IgoKUkVHSU9OPSJhcC1zb3V0aC0xIgpFQ1JfUkVQT1NJVE9SWT0iMzYzMjQyMTA0ODA1LmRrci5lY3IuYXAtc291dGgtMS5hbWF6b25hd3MuY29tL2RzbzMwMy1hc3NpZ25tZW50Mi1iYWNrZW5kIgpEQl9IT1NUPSJkc28zMDMtYXNzaWdubWVudDItcG9zdGdyZXMuY2ZpYzJpZXNlamhyLmFwLXNvdXRoLTEucmRzLmFtYXpvbmF3cy5jb20iCkRCX1NFQ1JFVF9BUk49ImFybjphd3M6c2VjcmV0c21hbmFnZXI6YXAtc291dGgtMTozNjMyNDIxMDQ4MDU6c2VjcmV0OnJkcyFkYi03OTRiZWY2ZC03OWIyLTQ4YWEtYWZhNi04M2NkMDU4ZTU1ZDEtS1AzcmZsIgoKIyBJbnN0YWxsIERvY2tlciBhbmQgQVdTIENMSS4KIyBSZXF1aXJlcyBvdXRib3VuZCBjb25uZWN0aXZpdHkgdGhyb3VnaCBOQVQuCmRuZiBpbnN0YWxsIC15IGRvY2tlciBhd3NjbGkganEKCnN5c3RlbWN0bCBlbmFibGUgLS1ub3cgZG9ja2VyCgojIFJldHJpZXZlIHRoZSBSRFMtbWFuYWdlZCBjcmVkZW50aWFscy4KIyBOZXZlciBwcmludCB0aGUgc2VjcmV0IHRvIHRoZSBib290c3RyYXAgbG9nLgpzZXQgK3gKREJfU0VDUkVUPSQoYXdzIHNlY3JldHNtYW5hZ2VyIGdldC1zZWNyZXQtdmFsdWUgXAogIC0tcmVnaW9uICIkUkVHSU9OIiBcCiAgLS1zZWNyZXQtaWQgIiREQl9TRUNSRVRfQVJOIiBcCiAgLS1xdWVyeSBTZWNyZXRTdHJpbmcgXAogIC0tb3V0cHV0IHRleHQpCgpEQl9VU0VSPSQocHJpbnRmICclcycgIiREQl9TRUNSRVQiIHwganEgLXIgJy51c2VybmFtZScpCkRCX1BBU1NXT1JEPSQocHJpbnRmICclcycgIiREQl9TRUNSRVQiIHwganEgLXIgJy5wYXNzd29yZCcpCnVuc2V0IERCX1NFQ1JFVAoKIyBDcmVhdGUgYW4gZW52aXJvbm1lbnQgZmlsZSB3aXRoIHJlc3RyaWN0ZWQgcGVybWlzc2lvbnMuCmluc3RhbGwgLWQgLW0gNzAwIC9ldGMvZHNvMzAzCgpFTlZfRklMRT0iL2V0Yy9kc28zMDMvYmFja2VuZC5lbnYiCgpwcmludGYgJ05PREVfRU5WPXByb2R1Y3Rpb25cblBPUlQ9MzAwMFxuREJfSE9TVD0lc1xuREJfUE9SVD01NDMyXG5EQl9VU0VSPSVzXG5EQl9OQU1FPWRzbzMwM1xuQVdTX1JFR0lPTj1hcC1zb3V0aC0xXG5TM19TVUJNSVNTSU9OU19CVUNLRVQ9ZHNvMzAzLWFzc2lnbm1lbnQyLXN1Ym1pc3Npb25zLTUyMzFiODVjYjVlMzIwZjM0YjUwOTA0YTE4XG4nIFwKICAiJERCX0hPU1QiICIkREJfVVNFUiIgPiAiJEVOVl9GSUxFIgoKIyBBcHBlbmQgdGhlIHBhc3N3b3JkIHdpdGhvdXQgZXhwb3NpbmcgaXQgaW4gVGVycmFmb3JtLgpwcmludGYgJ0RCX1BBU1NXT1JEPSVzXG4nICIkREJfUEFTU1dPUkQiID4+ICIkRU5WX0ZJTEUiCmNobW9kIDYwMCAiJEVOVl9GSUxFIgp1bnNldCBEQl9QQVNTV09SRAoKIyBBdXRoZW50aWNhdGUgRG9ja2VyIHRvIEFtYXpvbiBFQ1IuCmF3cyBlY3IgZ2V0LWxvZ2luLXBhc3N3b3JkIC0tcmVnaW9uICIkUkVHSU9OIiBcCiAgfCBkb2NrZXIgbG9naW4gXAogICAgICAtLXVzZXJuYW1lIEFXUyBcCiAgICAgIC0tcGFzc3dvcmQtc3RkaW4gXAogICAgICAiJChlY2hvICIkRUNSX1JFUE9TSVRPUlkiIHwgY3V0IC1kLyAtZjEpIgoKIyBEb3dubG9hZCB0aGUgcHVibGlzaGVkIGJhY2tlbmQgaW1hZ2UuCmRvY2tlciBwdWxsICIkRUNSX1JFUE9TSVRPUlk6bGF0ZXN0IgoKIyBTdGFydCB0aGUgYWN0dWFsIE5vZGUuanMgYmFja2VuZC4KZG9ja2VyIHJ1biAtZCBcCiAgLS1uYW1lIGRzbzMwMy1iYWNrZW5kIFwKICAtLXJlc3RhcnQgdW5sZXNzLXN0b3BwZWQgXAogIC0tZW52LWZpbGUgIiRFTlZfRklMRSIgXAogIC1wIDMwMDA6MzAwMCBcCiAgIiRFQ1JfUkVQT1NJVE9SWTpsYXRlc3QiCgplY2hvICJEU08zMDMgYmFja2VuZCBjb250YWluZXIgc3RhcnRlZCIK"
+        # (12 unchanged attributes hidden)
+
+        # (5 unchanged blocks hidden)
+    }
+
+  # aws_s3_bucket_cors_configuration.assignments will be created
+  + resource "aws_s3_bucket_cors_configuration" "assignments" {
+      + bucket = "dso303-assignment2-submissions-5231b85cb5e320f34b50904a18"
+      + id     = (known after apply)
+      + region = "ap-south-1"
+
+      + cors_rule {
+          + allowed_headers = [
+              + "Content-Type",
+            ]
+          + allowed_methods = [
+              + "PUT",
+            ]
+          + allowed_origins = [
+              + "https://d1aqk07me8w74.cloudfront.net",
+            ]
+          + expose_headers  = [
+              + "ETag",
+            ]
+          + max_age_seconds = 300
+        }
+    }
+
+Plan: 1 to add, 3 to change, 0 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Saved the plan to: s3-upload.tfplan
+
+To perform exactly these actions, run the following command to apply:
+    terraform apply "s3-upload.tfplan"

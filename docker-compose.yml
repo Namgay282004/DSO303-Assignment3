@@ -1,0 +1,37 @@
+
+services:
+  backend:
+    build:
+      context: ./backend
+    image: dso303-backend:local
+    container_name: dso303-backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      NODE_ENV: production
+      PORT: "3000"
+      DB_HOST: dso303-postgres
+      DB_PORT: "5432"
+    ports:
+      - "127.0.0.1:3001:3000"
+    networks:
+      - dso303-network
+
+  frontend:
+    build:
+      context: ./frontend
+    image: dso303-frontend:local
+    container_name: dso303-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "127.0.0.1::80"
+    networks:
+      - dso303-network
+
+networks:
+  dso303-network:
+    external: true
+    name: dso303-network

@@ -1,0 +1,70 @@
+aws_route_table_association.private_app_b: Refreshing state... [id=rtbassoc-09078061de71bc28c]
+data.aws_availability_zones.available: Reading...
+aws_vpc.main: Refreshing state... [id=vpc-013a436d8aa50efe8]
+data.aws_availability_zones.available: Read complete after 1s [id=ap-south-1]
+aws_internet_gateway.main: Refreshing state... [id=igw-053aed94ac53db899]
+aws_subnet.private_app_b: Refreshing state... [id=subnet-010bd501c4d17262e]
+aws_subnet.database_b: Refreshing state... [id=subnet-004d18ed4ce807748]
+aws_subnet.public_a: Refreshing state... [id=subnet-076a638c1f5525c41]
+aws_subnet.private_app_a: Refreshing state... [id=subnet-06c7691d9e27f9e87]
+aws_subnet.public_b: Refreshing state... [id=subnet-03d7b2163692f715f]
+aws_route_table.database: Refreshing state... [id=rtb-0e95cd84edf894268]
+aws_route_table.private_app: Refreshing state... [id=rtb-00c228cbc69695a70]
+aws_subnet.database_a: Refreshing state... [id=subnet-00f66c880c7ee3c67]
+aws_route_table.public: Refreshing state... [id=rtb-0c215c206d6b5bd94]
+aws_route_table_association.database_b: Refreshing state... [id=rtbassoc-088db6291901352fc]
+aws_route_table_association.private_app_a: Refreshing state... [id=rtbassoc-04d0eb18c321093a1]
+aws_route_table_association.public_b: Refreshing state... [id=rtbassoc-0a0b82936a57264e0]
+aws_route_table_association.public_a: Refreshing state... [id=rtbassoc-0ca8fdc6d307c4a7a]
+aws_route_table_association.database_a: Refreshing state... [id=rtbassoc-03538e43dbb3d23bb]
+
+Terraform used the selected providers to generate the following execution
+plan. Resource actions are indicated with the following symbols:
+  + create
+  - destroy
+
+Terraform will perform the following actions:
+
+  # aws_route_table.private_app_b will be created
+  + resource "aws_route_table" "private_app_b" {
+      + arn              = (known after apply)
+      + id               = (known after apply)
+      + owner_id         = (known after apply)
+      + propagating_vgws = (known after apply)
+      + region           = "ap-south-1"
+      + route            = (known after apply)
+      + tags             = {
+          + "Name" = "Private-App-Route-Table-B"
+        }
+      + tags_all         = {
+          + "Environment" = "Development"
+          + "ManagedBy"   = "Terraform"
+          + "Name"        = "Private-App-Route-Table-B"
+          + "Project"     = "DSO303-Assignment2"
+        }
+      + vpc_id           = "vpc-013a436d8aa50efe8"
+    }
+
+  # aws_route_table_association.private_app_b will be destroyed
+  # (because aws_route_table_association.private_app_b is not in configuration)
+  - resource "aws_route_table_association" "private_app_b" {
+      - id             = "rtbassoc-09078061de71bc28c" -> null
+      - region         = "ap-south-1" -> null
+      - route_table_id = "rtb-00c228cbc69695a70" -> null
+      - subnet_id      = "subnet-010bd501c4d17262e" -> null
+    }
+
+  # aws_route_table_association.private_app_b_az will be created
+  + resource "aws_route_table_association" "private_app_b_az" {
+      + id             = (known after apply)
+      + region         = "ap-south-1"
+      + route_table_id = (known after apply)
+      + subnet_id      = "subnet-010bd501c4d17262e"
+    }
+
+Plan: 2 to add, 0 to change, 1 to destroy.
+
+─────────────────────────────────────────────────────────────────────────────
+
+Note: You didn't use the -out option to save this plan, so Terraform can't
+guarantee to take exactly these actions if you run "terraform apply" now.

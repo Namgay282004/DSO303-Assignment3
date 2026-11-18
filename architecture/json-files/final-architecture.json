@@ -1,0 +1,1702 @@
+{
+  "format": "aws-architecture-lab",
+  "version": 2,
+  "applicationRelease": {
+    "version": "1.0.0",
+    "buildId": "e0a42ea0-ddb8-4c6f-ba18-8fe0f6b62f19",
+    "channel": "stable",
+    "builtAt": "2026-11-08T10:26:50.924Z",
+    "draftVersion": 2
+  },
+  "savedAt": "2026-11-12T07:58:26.903Z",
+  "state": {
+    "draftName": "DSO303 A2 | Exam Failover Test - Global AZ Metadata Fix",
+    "nodes": [
+      {
+        "id": "box-vpc",
+        "type": "boundaryNode",
+        "position": {
+          "x": 850,
+          "y": 130
+        },
+        "data": {
+          "label": "Production VPC | 10.0.0.0/16",
+          "boundaryType": "vpc",
+          "width": 1680,
+          "height": 1640,
+          "cidr": "10.0.0.0/16",
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 1680,
+          "height": 1640
+        },
+        "draggable": false,
+        "selectable": true,
+        "zIndex": -4,
+        "measured": {
+          "width": 1680,
+          "height": 1640
+        }
+      },
+      {
+        "id": "box-public-az1",
+        "type": "boundaryNode",
+        "position": {
+          "x": 900,
+          "y": 220
+        },
+        "data": {
+          "label": "Public Subnet A | 10.0.1.0/24",
+          "boundaryType": "public_subnet",
+          "width": 760,
+          "height": 240,
+          "cidr": "10.0.0.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.0.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.0.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.0.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.0.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.31.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.0.4",
+            "end": "10.0.31.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 240
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 240
+        }
+      },
+      {
+        "id": "box-public-az2",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1740,
+          "y": 220
+        },
+        "data": {
+          "label": "Public Subnet B | 10.0.2.0/24",
+          "boundaryType": "public_subnet",
+          "width": 760,
+          "height": 240,
+          "cidr": "10.0.32.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.32.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.32.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.32.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.32.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.63.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.32.4",
+            "end": "10.0.63.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 240
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 240
+        }
+      },
+      {
+        "id": "box-private-az1",
+        "type": "boundaryNode",
+        "position": {
+          "x": 900,
+          "y": 520
+        },
+        "data": {
+          "label": "Private App Subnet A | 10.0.3.0/24",
+          "boundaryType": "private_subnet",
+          "width": 760,
+          "height": 720,
+          "cidr": "10.0.64.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.64.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.64.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.64.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.64.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.95.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.64.4",
+            "end": "10.0.95.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 720
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 720
+        }
+      },
+      {
+        "id": "box-private-az2",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1740,
+          "y": 520
+        },
+        "data": {
+          "label": "Private App Subnet B | 10.0.4.0/24",
+          "boundaryType": "private_subnet",
+          "width": 760,
+          "height": 720,
+          "cidr": "10.0.96.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.96.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.96.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.96.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.96.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.127.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.96.4",
+            "end": "10.0.127.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 720
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 720
+        }
+      },
+      {
+        "id": "node-users",
+        "type": "serviceNode",
+        "position": {
+          "x": 70,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "user",
+          "label": "Students / Tutors / Admins",
+          "category": "Client / Ingress",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "selected": true
+      },
+      {
+        "id": "node-cloudfront",
+        "type": "serviceNode",
+        "position": {
+          "x": 390,
+          "y": 360
+        },
+        "data": {
+          "serviceId": "cloudfront",
+          "label": "CloudFront\nCDN + HTTPS",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-waf",
+        "type": "serviceNode",
+        "position": {
+          "x": 390,
+          "y": 610
+        },
+        "data": {
+          "serviceId": "waf",
+          "label": "AWS WAF\nCloudFront ACL",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-cognito",
+        "type": "serviceNode",
+        "position": {
+          "x": 390,
+          "y": 90
+        },
+        "data": {
+          "serviceId": "cognito",
+          "label": "Cognito\nRole sign-in",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 139,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 139,
+          "height": 82
+        },
+        "style": {
+          "width": 139,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-alb",
+        "type": "serviceNode",
+        "position": {
+          "x": 1570,
+          "y": 300
+        },
+        "data": {
+          "serviceId": "alb",
+          "label": "Public ALB\nAZ-A + AZ-B",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "public",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-nat-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 1080,
+          "y": 310
+        },
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT Gateway A",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "public",
+          "width": 111,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 111,
+          "height": 82
+        },
+        "style": {
+          "width": 111,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-nat-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1940,
+          "y": 310
+        },
+        "data": {
+          "serviceId": "nat_gateway",
+          "label": "NAT Gateway B",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "public",
+          "width": 111,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 111,
+          "height": 82
+        },
+        "style": {
+          "width": 111,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-ec2-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 1150,
+          "y": 680
+        },
+        "data": {
+          "serviceId": "ec2",
+          "label": "API EC2\nAZ-A",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "width": 101,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 101,
+          "height": 82
+        },
+        "style": {
+          "width": 101,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-ec2-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1980,
+          "y": 680
+        },
+        "data": {
+          "serviceId": "ec2",
+          "label": "API EC2\nAZ-B",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "width": 101,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 101,
+          "height": 82
+        },
+        "style": {
+          "width": 101,
+          "height": 82
+        },
+        "selected": false
+      },
+      {
+        "id": "node-rds-primary",
+        "type": "serviceNode",
+        "position": {
+          "x": 1150,
+          "y": 1400
+        },
+        "data": {
+          "serviceId": "rds",
+          "label": "RDS PostgreSQL\nPrimary",
+          "category": "Database",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "multiAz": true
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "selected": false
+      },
+      {
+        "id": "node-rds-replica",
+        "type": "serviceNode",
+        "position": {
+          "x": 1980,
+          "y": 1400
+        },
+        "data": {
+          "serviceId": "rds",
+          "label": "RDS PostgreSQL\nStandby",
+          "category": "Database",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "selected": false
+      },
+      {
+        "id": "node-s3",
+        "type": "serviceNode",
+        "position": {
+          "x": 390,
+          "y": 1020
+        },
+        "data": {
+          "serviceId": "s3",
+          "label": "S3 Assignments\n50 MB max",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "selected": false
+      },
+      {
+        "id": "node-sqs-marking",
+        "type": "serviceNode",
+        "position": {
+          "x": 2880,
+          "y": 1050
+        },
+        "data": {
+          "serviceId": "sqs",
+          "label": "SQS\nMarking Jobs",
+          "category": "Application Integration",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 127,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 127,
+          "height": 82
+        },
+        "style": {
+          "width": 127,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-sns-email",
+        "type": "serviceNode",
+        "position": {
+          "x": 2880,
+          "y": 1370
+        },
+        "data": {
+          "serviceId": "sns",
+          "label": "SES / SNS\nEmail Alerts",
+          "category": "Application Integration",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-secrets",
+        "type": "serviceNode",
+        "position": {
+          "x": 2880,
+          "y": 780
+        },
+        "data": {
+          "serviceId": "secrets_manager",
+          "label": "Secrets Manager\nDB Credentials",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-developer",
+        "type": "serviceNode",
+        "position": {
+          "x": 100,
+          "y": 1850
+        },
+        "data": {
+          "serviceId": "developer",
+          "label": "DevOps Engineer",
+          "category": "Third-Party & External",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 122,
+          "height": 82,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 122,
+          "height": 82
+        },
+        "style": {
+          "width": 122,
+          "height": 82
+        }
+      },
+      {
+        "id": "node-codecommit",
+        "type": "serviceNode",
+        "position": {
+          "x": 510,
+          "y": 1850
+        },
+        "data": {
+          "serviceId": "codecommit",
+          "label": "CodeCommit\nGit Source",
+          "category": "Developer Tools",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-codepipeline",
+        "type": "serviceNode",
+        "position": {
+          "x": 940,
+          "y": 1850
+        },
+        "data": {
+          "serviceId": "codepipeline",
+          "label": "CodePipeline\nDeploy on main",
+          "category": "Developer Tools",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-codebuild",
+        "type": "serviceNode",
+        "position": {
+          "x": 1370,
+          "y": 1850
+        },
+        "data": {
+          "serviceId": "codebuild",
+          "label": "CodeBuild\nBuild + Test",
+          "category": "Developer Tools",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-codedeploy",
+        "type": "serviceNode",
+        "position": {
+          "x": 1800,
+          "y": 1850
+        },
+        "data": {
+          "serviceId": "codedeploy",
+          "label": "CodeDeploy\nEC2 Rollout",
+          "category": "Developer Tools",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-cloudwatch",
+        "type": "serviceNode",
+        "position": {
+          "x": 2880,
+          "y": 240
+        },
+        "data": {
+          "serviceId": "cloudwatch",
+          "label": "CloudWatch\nLogs + Alarms",
+          "category": "Management & Governance",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-worker-a",
+        "type": "serviceNode",
+        "position": {
+          "x": 1150,
+          "y": 1000
+        },
+        "data": {
+          "serviceId": "ec2",
+          "label": "Marking Worker\nAZ-A",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-A",
+          "subnet": "private",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-worker-b",
+        "type": "serviceNode",
+        "position": {
+          "x": 1980,
+          "y": 1000
+        },
+        "data": {
+          "serviceId": "ec2",
+          "label": "Marking Worker\nAZ-B",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "AZ-B",
+          "subnet": "private",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        },
+        "selected": false
+      },
+      {
+        "id": "node-asg",
+        "type": "serviceNode",
+        "position": {
+          "x": 2890,
+          "y": 470
+        },
+        "data": {
+          "serviceId": "auto_scaling",
+          "label": "EC2 Auto Scaling\nMulti-AZ",
+          "category": "Compute",
+          "health": "healthy",
+          "az": "Multi-AZ",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-route53",
+        "type": "serviceNode",
+        "position": {
+          "x": 150,
+          "y": 90
+        },
+        "data": {
+          "serviceId": "route53",
+          "label": "Route 53\nPublic DNS",
+          "category": "Networking & Content Delivery",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-acm",
+        "type": "serviceNode",
+        "position": {
+          "x": 700,
+          "y": 80
+        },
+        "data": {
+          "serviceId": "acm",
+          "label": "ACM\nTLS Certificates",
+          "category": "Security, Identity & Compliance",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "node-frontend",
+        "type": "serviceNode",
+        "position": {
+          "x": 390,
+          "y": 1280
+        },
+        "data": {
+          "serviceId": "s3",
+          "label": "S3 Frontend\nPrivate origin",
+          "category": "Storage",
+          "health": "healthy",
+          "az": "Global",
+          "subnet": "global",
+          "width": 140,
+          "height": 99,
+          "isSimulating": false,
+          "simulationStatus": "idle"
+        },
+        "zIndex": 10,
+        "measured": {
+          "width": 140,
+          "height": 99
+        },
+        "style": {
+          "width": 140,
+          "height": 99
+        }
+      },
+      {
+        "id": "box-db-az1",
+        "type": "boundaryNode",
+        "position": {
+          "x": 900,
+          "y": 1280
+        },
+        "data": {
+          "label": "Isolated DB Subnet A | 10.0.5.0/24",
+          "boundaryType": "private_subnet",
+          "width": 760,
+          "height": 390,
+          "cidr": "10.0.128.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.128.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.128.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.128.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.128.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.159.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.128.4",
+            "end": "10.0.159.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 390
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 390
+        }
+      },
+      {
+        "id": "box-db-az2",
+        "type": "boundaryNode",
+        "position": {
+          "x": 1740,
+          "y": 1280
+        },
+        "data": {
+          "label": "Isolated DB Subnet B | 10.0.6.0/24",
+          "boundaryType": "private_subnet",
+          "width": 760,
+          "height": 390,
+          "cidr": "10.0.160.0/19",
+          "totalAddresses": 8192,
+          "usableHosts": 8187,
+          "reservedAddresses": [
+            {
+              "ip": "10.0.160.0",
+              "offset": 0,
+              "role": "Network Address",
+              "description": "First address in the subnet. Identifies the network itself."
+            },
+            {
+              "ip": "10.0.160.1",
+              "offset": 1,
+              "role": "VPC Router",
+              "description": "Reserved by AWS for the default VPC router / subnet gateway."
+            },
+            {
+              "ip": "10.0.160.2",
+              "offset": 2,
+              "role": "Amazon-Provided DNS",
+              "description": "Reserved by AWS for the DNS resolver (Route 53 Resolver / AmazonProvidedDNS)."
+            },
+            {
+              "ip": "10.0.160.3",
+              "offset": 3,
+              "role": "AWS Future Use",
+              "description": "Reserved by AWS for potential future internal functionality."
+            },
+            {
+              "ip": "10.0.191.255",
+              "offset": 8191,
+              "role": "Network Broadcast Address",
+              "description": "Last address in the subnet. AWS does not support broadcast in a VPC, but reserves the address."
+            }
+          ],
+          "usableRange": {
+            "start": "10.0.160.4",
+            "end": "10.0.191.254"
+          },
+          "isSimulating": false,
+          "simulationStatus": "idle",
+          "health": "healthy"
+        },
+        "style": {
+          "width": 760,
+          "height": 390
+        },
+        "draggable": false,
+        "zIndex": -3,
+        "measured": {
+          "width": 760,
+          "height": 390
+        }
+      }
+    ],
+    "edges": [
+      {
+        "id": "e-users-cf",
+        "source": "node-users",
+        "target": "node-cloudfront",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "stepNumber": 1,
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "completed",
+          "flowStepNumber": 1
+        }
+      },
+      {
+        "id": "e-cf-alb",
+        "source": "node-cloudfront",
+        "target": "node-alb",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "synchronous",
+          "stepNumber": 2,
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "completed",
+          "flowStepNumber": 2
+        }
+      },
+      {
+        "id": "e-alb-ec2-a",
+        "source": "node-alb",
+        "target": "node-ec2-a",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTP",
+          "interactionType": "synchronous",
+          "stepNumber": 3,
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "completed",
+          "flowStepNumber": 3
+        }
+      },
+      {
+        "id": "e-alb-ec2-b",
+        "source": "node-alb",
+        "target": "node-ec2-b",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTP",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-ec2-a-rds",
+        "source": "node-ec2-a",
+        "target": "node-rds-primary",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "stepNumber": 4,
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "completed",
+          "flowStepNumber": 4
+        }
+      },
+      {
+        "id": "e-dev-commit",
+        "source": "node-developer",
+        "target": "node-codecommit",
+        "type": "custom",
+        "data": {
+          "protocol": "SSH",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-commit-pipeline",
+        "source": "node-codecommit",
+        "target": "node-codepipeline",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-pipeline-build",
+        "source": "node-codepipeline",
+        "target": "node-codebuild",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-build-deploy",
+        "source": "node-codebuild",
+        "target": "node-codedeploy",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-deploy-ec2-a",
+        "source": "node-codedeploy",
+        "target": "node-ec2-a",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-deploy-ec2-b",
+        "source": "node-codedeploy",
+        "target": "node-ec2-b",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-ec2-b-rds",
+        "source": "node-ec2-b",
+        "target": "node-rds-primary",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-cf-s3",
+        "source": "node-cloudfront",
+        "target": "node-frontend",
+        "type": "custom",
+        "data": {
+          "protocol": "Object access",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-rds-mirror",
+        "source": "node-rds-primary",
+        "target": "node-rds-replica",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "synchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-ec2-cw",
+        "source": "node-ec2-a",
+        "target": "node-cloudwatch",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        },
+        "selected": false
+      },
+      {
+        "id": "e-waf-cloudfront",
+        "source": "node-waf",
+        "target": "node-cloudfront",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "synchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-sqs-worker-a",
+        "source": "node-sqs-marking",
+        "target": "node-worker-a",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-sqs-worker-b",
+        "source": "node-sqs-marking",
+        "target": "node-worker-b",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-a-rds",
+        "source": "node-worker-a",
+        "target": "node-rds-primary",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-a-sns",
+        "source": "node-worker-a",
+        "target": "node-sns-email",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-alb-cw",
+        "source": "node-alb",
+        "target": "node-cloudwatch",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-cw-asg",
+        "source": "node-cloudwatch",
+        "target": "node-asg",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-users-dns",
+        "source": "node-users",
+        "target": "node-route53",
+        "type": "custom",
+        "data": {
+          "protocol": "DNS",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-dns-cf",
+        "source": "node-route53",
+        "target": "node-cloudfront",
+        "type": "custom",
+        "data": {
+          "protocol": "DNS",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-acm-cf",
+        "source": "node-acm",
+        "target": "node-cloudfront",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-acm-alb",
+        "source": "node-acm",
+        "target": "node-alb",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-cognito-api-auth",
+        "source": "node-cognito",
+        "target": "node-ec2-a",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-b-rds",
+        "source": "node-worker-b",
+        "target": "node-rds-primary",
+        "type": "custom",
+        "data": {
+          "protocol": "SQL",
+          "interactionType": "synchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-b-sns",
+        "source": "node-worker-b",
+        "target": "node-sns-email",
+        "type": "custom",
+        "data": {
+          "protocol": "HTTPS",
+          "interactionType": "asynchronous",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-ec2-b-cw",
+        "source": "node-ec2-b",
+        "target": "node-cloudwatch",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-a-cw",
+        "source": "node-worker-a",
+        "target": "node-cloudwatch",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      },
+      {
+        "id": "e-worker-b-cw",
+        "source": "node-worker-b",
+        "target": "node-cloudwatch",
+        "type": "custom",
+        "data": {
+          "protocol": "Event",
+          "interactionType": "asynchronous",
+          "relationship": "manages",
+          "isSimulating": false,
+          "isFailing": false,
+          "flowStatus": "idle"
+        }
+      }
+    ],
+    "scenario": {
+      "id": "a2-exam-get",
+      "name": "Walkthrough 1 - Open exam API",
+      "startNodeId": "node-users",
+      "method": "GET",
+      "path": "/api/exams/current",
+      "trafficLevel": "normal",
+      "assumeGateways": true
+    },
+    "simulationResult": null,
+    "activeFailures": [],
+    "activeLabReference": null,
+    "activeChallengeId": null,
+    "challengeResult": null,
+    "appMode": "failure",
+    "selectedNodeId": null,
+    "selectedEdgeId": null,
+    "activeStepIndex": null,
+    "playbackSpeed": 1,
+    "highlightTaskFlow": true,
+    "showNaclSideColumn": false,
+    "viewport": {
+      "x": 75.25322743088145,
+      "y": 129.87212116779523,
+      "zoom": 0.2423830949181503
+    }
+  }
+}
