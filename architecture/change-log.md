@@ -118,3 +118,15 @@ The Assignment 3 revision introduces compute purchasing optimization, network en
 The existing Multi-AZ architecture is retained as the foundation for availability.
 
 The revised design is financially promising based on the partial calculator estimates. However, the final architecture must be evaluated through load testing, failure scenarios, and complete cost modeling before the university's performance and recovery requirements can be confirmed.
+
+## 7. Assignment 3 Simulator Revisions and Evidence
+
+![Final Assignment 3 revised architecture](screenshots/final-revised-architecture-a3.png)
+
+*Final revised Assignment 3 architecture used for the simulation.*
+
+The architecture was revised after the simulator returned **“Behavior not modeled”** for a direct API EC2-to-S3 Gateway Endpoint simulation connection. The unsupported simulated edge was removed from the request path; the endpoint remains a **proposed design option**, not a validated simulator behavior.
+
+The successful AZ-A, AZ-B, RDS primary, and EC2 AZ-A failure traces are documented in [failure scenarios](../infra/failure-scenarios.md). The Architecture Analysis separately predicted database contention and reported configuration findings. Its RDS standby warning is not consistent with the modeled RDS failover trace.
+
+**Single points of failure:** Multi-AZ compute and database failover are proposed and partly supported by simulated traces; insufficient baseline EC2 capacity, database throughput contention, logical corruption, and unverified backups remain risks. The complete two-AZ infrastructure cost is not represented by the one-instance normal-month calculator baseline.

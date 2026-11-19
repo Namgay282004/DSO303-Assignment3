@@ -10,7 +10,7 @@ This report evaluates the estimated AWS operating costs, affordability, and resi
 
 
 
-The primary AWS Region is ****Asia Pacific (Singapore), ap-southeast-1****.
+The primary AWS Region is **Asia Pacific (Singapore), ap-southeast-1**.
 
 
 
@@ -18,13 +18,13 @@ The report considers two workload profiles:
 
 
 
-- ****Normal month:**** 300–500 concurrent users, for 10 months per year.
+- **Normal month:** 300–500 concurrent users, for 10 months per year.
 
-- ****Exam month:**** Up to 3,000 students starting an examination within five minutes, for 2 months per year.
+- **Exam month:** Up to 3,000 students starting an examination within five minutes, for 2 months per year.
 
 
 
-The university's budget is ****USD 1,000 per month on average****, equivalent to USD 12,000 annually.
+The university's budget is **USD 1,000 per month on average**, equivalent to USD 12,000 annually.
 
 
 
@@ -48,7 +48,7 @@ The normal-month figures were verified against the exported AWS Pricing Calculat
 
 
 
-****Primary Region:**** Asia Pacific (Singapore), ap-southeast-1.
+**Primary Region:** Asia Pacific (Singapore), ap-southeast-1.
 
 
 
@@ -66,7 +66,7 @@ The normal-month figures were verified against the exported AWS Pricing Calculat
 
 | Amazon CloudWatch | 4.02 | 14.57 |
 
-| ****Total**** | ****83.09**** | ****138.71**** |
+| **Total** | **83.09** | **138.71** |
 
 
 
@@ -86,7 +86,7 @@ These estimates are incomplete because certain networking, encryption, data-tran
 
 
 
-****Pricing source:**** AWS Pricing Calculator export, \`DSO303 Assignment 3 - Normal Month(2).csv\`. Exam-month figures must be verified against the separate exam-month export.
+**Pricing source:** AWS Pricing Calculator export, `DSO303 Assignment 3 - Normal Month(2).csv`. Exam-month figures must be verified against the separate exam-month export.
 
 
 
@@ -98,7 +98,7 @@ Normal-month cost:
 
 
 
-10 × USD 83.09 = ****USD 830.90****
+10 × USD 83.09 = **USD 830.90**
 
 
 
@@ -106,7 +106,7 @@ Exam-month cost:
 
 
 
-2 × USD 138.71 = ****USD 277.42****
+2 × USD 138.71 = **USD 277.42**
 
 
 
@@ -114,7 +114,7 @@ Estimated annual cost:
 
 
 
-USD 830.90 + USD 277.42 = ****USD 1,108.32****
+USD 830.90 + USD 277.42 = **USD 1,108.32**
 
 
 
@@ -122,7 +122,7 @@ Average monthly cost:
 
 
 
-USD 1,108.32 ÷ 12 = ****USD 92.36****
+USD 1,108.32 ÷ 12 = **USD 92.36**
 
 
 
@@ -130,7 +130,7 @@ Annual cost per student, assuming 8,000 students:
 
 
 
-USD 1,108.32 ÷ 8,000 = ****USD 0.14 per student****
+USD 1,108.32 ÷ 8,000 = **USD 0.14 per student**
 
 
 
@@ -312,11 +312,11 @@ Based on the current exam-month estimate:
 
 
 
-1. ****Amazon RDS — USD 68.48/month.**** The database provides persistent storage for examinations, student answers, and results.
+1. **Amazon RDS — USD 68.48/month.** The database provides persistent storage for examinations, student answers, and results.
 
-2. ****Amazon EC2 — USD 28.91/month.**** EC2 runs the application backend and supports request processing.
+2. **Amazon EC2 — USD 28.91/month.** EC2 runs the application backend and supports request processing.
 
-3. ****Application Load Balancer — USD 24.24/month.**** The load balancer distributes incoming requests across application instances.
+3. **Application Load Balancer — USD 24.24/month.** The load balancer distributes incoming requests across application instances.
 
 
 
@@ -354,7 +354,7 @@ The primary Region is Asia Pacific (Singapore), ap-southeast-1. Where available,
 
 
 
-****Recommendation:**** Retain EC2 Auto Scaling for the existing backend because it requires fewer application changes. Configure capacity across at least two AZs and verify scaling behavior during examination peaks.
+**Recommendation:** Retain EC2 Auto Scaling for the existing backend because it requires fewer application changes. Configure capacity across at least two AZs and verify scaling behavior during examination peaks.
 
 
 
@@ -380,7 +380,7 @@ The current calculator figures estimate EC2 instance costs; they do not prove th
 
 
 
-****Recommendation:**** Retain RDS PostgreSQL Multi-AZ for the current design, subject to performance testing and verification of the required RPO and RTO.
+**Recommendation:** Retain RDS PostgreSQL Multi-AZ for the current design, subject to performance testing and verification of the required RPO and RTO.
 
 
 
@@ -422,7 +422,7 @@ However, these configurations do not provide identical networking functionality.
 
 
 
-****Recommendation:**** Use S3 Gateway Endpoints where suitable, evaluate interface endpoints for supported AWS services, and retain NAT Gateways where general outbound internet connectivity is necessary.
+**Recommendation:** Use S3 Gateway Endpoints where suitable, evaluate interface endpoints for supported AWS services, and retain NAT Gateways where general outbound internet connectivity is necessary.
 
 
 
@@ -452,7 +452,7 @@ Savings Plans affect purchasing costs rather than the resilience or performance 
 
 
 
-****Recommendation:**** Consider a one-year Compute Savings Plan for predictable baseline usage, while retaining flexibility for additional exam-month capacity.
+**Recommendation:** Consider a one-year Compute Savings Plan for predictable baseline usage, while retaining flexibility for additional exam-month capacity.
 
 
 
@@ -482,7 +482,7 @@ However, the estimate does not fully represent future data growth, all transitio
 
 
 
-****Recommendation:**** Keep active examination files in S3 Standard and transition older records to Glacier Deep Archive when immediate access is no longer required.
+**Recommendation:** Keep active examination files in S3 Standard and transition older records to Glacier Deep Archive when immediate access is no longer required.
 
 
 
@@ -546,23 +546,23 @@ A one-year Compute Savings Plan with no upfront payment was evaluated as an alte
 
 | Annual equivalent | $134.16 | $83.28 |
 
-| Monthly cost reduction | | ****$4.24**** |
+| Monthly cost reduction | | **$4.24** |
 
-| Annual cost reduction | | ****$50.88**** |
+| Annual cost reduction | | **$50.88** |
 
-| Percentage reduction | | ****37.92%**** |
-
-
-
-****Benefits:**** The purchasing option can reduce the cost of a predictable baseline compute workload without changing the application architecture.
+| Percentage reduction | | **37.92%** |
 
 
 
-****Limitations:**** Savings Plans involve a spending commitment. Additional exam-month capacity may require On-Demand pricing or additional covered usage. The calculation represents the estimated reduction for the selected baseline configuration, not the entire application's annual savings.
+**Benefits:** The purchasing option can reduce the cost of a predictable baseline compute workload without changing the application architecture.
 
 
 
-****Recommendation:**** Consider a Savings Plan for predictable baseline compute usage after confirming the appropriate hourly commitment.
+**Limitations:** Savings Plans involve a spending commitment. Additional exam-month capacity may require On-Demand pricing or additional covered usage. The calculation represents the estimated reduction for the selected baseline configuration, not the entire application's annual savings.
+
+
+
+**Recommendation:** Consider a Savings Plan for predictable baseline compute usage after confirming the appropriate hourly commitment.
 
 
 
@@ -586,11 +586,11 @@ AWS PrivateLink was evaluated as an alternative for accessing supported AWS serv
 
 | Annual equivalent | $1,040.64 | $228.96 |
 
-| Potential monthly difference | | ****$67.64**** |
+| Potential monthly difference | | **$67.64** |
 
-| Potential annual difference | | ****$811.68**** |
+| Potential annual difference | | **$811.68** |
 
-| Potential percentage reduction | | ****78.00%**** |
+| Potential percentage reduction | | **78.00%** |
 
 
 
@@ -598,15 +598,15 @@ The NAT scenario models two standard NAT Gateways, each with 730 operating hours
 
 
 
-****Benefits:**** PrivateLink provides private access to supported services. S3 Gateway Endpoints may also reduce NAT processing charges for S3 traffic without endpoint hourly charges.
+**Benefits:** PrivateLink provides private access to supported services. S3 Gateway Endpoints may also reduce NAT processing charges for S3 traffic without endpoint hourly charges.
 
 
 
-****Limitations:**** PrivateLink is not a general replacement for internet access. The NAT Gateway and PrivateLink estimates are not functionally equivalent. The calculated difference is a potential scenario comparison, not a verified net saving. Actual savings depend on which NAT Gateways can be removed, which traffic remains, and whether additional endpoints are needed.
+**Limitations:** PrivateLink is not a general replacement for internet access. The NAT Gateway and PrivateLink estimates are not functionally equivalent. The calculated difference is a potential scenario comparison, not a verified net saving. Actual savings depend on which NAT Gateways can be removed, which traffic remains, and whether additional endpoints are needed.
 
 
 
-****Recommendation:**** Use S3 Gateway Endpoints for applicable S3 traffic and evaluate interface endpoints for other supported AWS services. Retain NAT Gateways wherever general outbound internet access is required.
+**Recommendation:** Use S3 Gateway Endpoints for applicable S3 traffic and evaluate interface endpoints for other supported AWS services. Retain NAT Gateways wherever general outbound internet access is required.
 
 
 
@@ -636,23 +636,23 @@ An optimized configuration was evaluated using:
 
 | Annual equivalent | $30.12 | $8.16 |
 
-| Monthly cost reduction | | ****$1.83**** |
+| Monthly cost reduction | | **$1.83** |
 
-| Annual cost reduction | | ****$21.96**** |
+| Annual cost reduction | | **$21.96** |
 
-| Percentage reduction | | ****72.91%**** |
-
-
-
-****Benefits:**** Older examination and assignment records can be stored at a lower monthly cost while supporting the five-year retention objective.
+| Percentage reduction | | **72.91%** |
 
 
 
-****Limitations:**** Glacier Deep Archive has minimum storage-duration requirements, retrieval delays, and possible retrieval and transition charges. This comparison assumes a steady 100 GB storage footprint and does not model five years of data growth or all possible retrieval activity.
+**Benefits:** Older examination and assignment records can be stored at a lower monthly cost while supporting the five-year retention objective.
 
 
 
-****Recommendation:**** Keep active examination records in S3 Standard and apply lifecycle transitions to historical records that are rarely accessed. Define retention and deletion rules according to the five-year requirement.
+**Limitations:** Glacier Deep Archive has minimum storage-duration requirements, retrieval delays, and possible retrieval and transition charges. This comparison assumes a steady 100 GB storage footprint and does not model five years of data growth or all possible retrieval activity.
+
+
+
+**Recommendation:** Keep active examination records in S3 Standard and apply lifecycle transitions to historical records that are rarely accessed. Define retention and deletion rules according to the five-year requirement.
 
 
 
@@ -724,7 +724,7 @@ AWS pricing varies by Region. Therefore, the Singapore estimate cannot be assume
 
 
 
-Network latency was measured using CloudPing (https\://cloudping.net/) on 18 November 2026, from a browser connected to the user's network in Bhutan.
+Network latency was measured using CloudPing (https://cloudping.net/) on 18 November 2026, from a browser connected to the user's network in Bhutan.
 
 
 
@@ -742,7 +742,7 @@ Three test runs were conducted for Asia Pacific (Singapore), ap-southeast-1, and
 
 | Run 3 | 118.86 | 134.48 |
 
-| ****Average**** | ****117.07**** | ****129.34**** |
+| **Average** | **117.07** | **129.34** |
 
 
 
@@ -754,15 +754,15 @@ Although Mumbai is geographically closer to Bhutan, the measurements show that g
 
 
 
-****Finding:**** Singapore performed better across all three browser-based tests and is a reasonable primary Region for the examination platform.
+**Finding:** Singapore performed better across all three browser-based tests and is a reasonable primary Region for the examination platform.
 
 
 
-****Limitation:**** These measurements were taken from one browser and network connection. They do not represent all Bhutanese users or directly measure examination API response times. Further testing from multiple networks would provide stronger evidence.
+**Limitation:** These measurements were taken from one browser and network connection. They do not represent all Bhutanese users or directly measure examination API response times. Further testing from multiple networks would provide stronger evidence.
 
 
 
-****Evidence:**** \`evidence/region-comparison/cloudping-run-1.png\`, \`cloudping-run-2.png\`, and \`cloudping-run-3.png\`.
+**Evidence:** `evidence/region-comparison/cloudping-run-1.png`, `cloudping-run-2.png`, and `cloudping-run-3.png`.
 
 
 
@@ -790,7 +790,7 @@ AWS Pricing Calculator estimates were prepared for Asia Pacific (Singapore), ap-
 
 | Data Transfer | 0.00 | 0.00 |
 
-| ****Total**** | ****83.09**** | ****77.84**** |
+| **Total** | **83.09** | **77.84** |
 
 
 
@@ -810,7 +810,7 @@ The measured average browser latency was 117.07 ms for Singapore and 129.34 ms f
 
 
 
-****Recommendation:**** Retain Singapore as the primary Region for Assignment 3 because it is required by the assignment and demonstrated lower latency in the recorded measurements. Mumbai remains a potentially cheaper alternative.
+**Recommendation:** Retain Singapore as the primary Region for Assignment 3 because it is required by the assignment and demonstrated lower latency in the recorded measurements. Mumbai remains a potentially cheaper alternative.
 
 
 
@@ -842,7 +842,7 @@ Based on the AWS Pricing Calculator estimates and browser-based latency measurem
 
 
 
-****Cost comparison:****
+**Cost comparison:**
 
 
 
@@ -854,7 +854,7 @@ Based on the AWS Pricing Calculator estimates and browser-based latency measurem
 
 
 
-****Latency comparison:****
+**Latency comparison:**
 
 
 
@@ -874,7 +874,7 @@ Both Regions support Multi-AZ architectures, but resilience depends on the actua
 
 
 
-****Final recommendation:**** Retain Singapore as the primary Region. Consider Mumbai as an alternative if future pricing, network measurements, or operational requirements justify a change.
+**Final recommendation:** Retain Singapore as the primary Region. Consider Mumbai as an alternative if future pricing, network measurements, or operational requirements justify a change.
 
 
 
@@ -940,7 +940,7 @@ Furthermore, the estimated resources have not yet been proven sufficient for the
 
 
 
-****Financial verdict:**** Provisionally affordable based on the current calculator estimates. Final affordability depends on completing the infrastructure cost model and verifying sufficient capacity.
+**Financial verdict:** Provisionally affordable based on the current calculator estimates. Final affordability depends on completing the infrastructure cost model and verifying sufficient capacity.
 
 
 
@@ -968,7 +968,7 @@ The test must identify a bottleneck, demonstrate an improvement, and repeat the 
 
 
 
-****Peak-load verdict:**** Not yet verified.
+**Peak-load verdict:** Not yet verified.
 
 
 
@@ -992,7 +992,7 @@ Failure testing must demonstrate how the platform behaves during an AZ outage an
 
 
 
-****Availability verdict:**** Designed for resilience, but not yet validated by Assignment 3 failure-test evidence.
+**Availability verdict:** Designed for resilience, but not yet validated by Assignment 3 failure-test evidence.
 
 
 
@@ -1012,7 +1012,7 @@ Multi-AZ database replication supports availability, but does not replace the ne
 
 
 
-****RPO verdict:**** Not yet verified against the five-minute target.
+**RPO verdict:** Not yet verified against the five-minute target.
 
 
 
@@ -1032,7 +1032,7 @@ The results should distinguish measured recovery times from theoretical expectat
 
 
 
-****RTO verdict:**** Not yet verified against the one-hour target.
+**RTO verdict:** Not yet verified against the one-hour target.
 
 
 
@@ -1052,7 +1052,7 @@ However, lifecycle policies, retention controls, database record retention, and 
 
 
 
-****Retention verdict:**** A suitable storage approach has been identified, but full five-year retention has not been verified.
+**Retention verdict:** A suitable storage approach has been identified, but full five-year retention has not been verified.
 
 
 
@@ -1072,7 +1072,7 @@ However, the available evidence does not yet prove that the proposed infrastruct
 
 
 
-****Overall verdict: Conditionally feasible.****
+**Overall verdict: Conditionally feasible.**
 
 
 
@@ -1103,3 +1103,129 @@ The initial AWS Pricing Calculator estimates suggest that the university examina
 
 
 The final recommendation will depend on the completed cost calculations, optimization comparisons, failure tests, and load-test evidence.
+
+## 12. Assignment 3 Evidence and Visual Comparisons
+
+The figures below use the exported calculator estimates and existing screenshots. All costs are estimates, not AWS invoices. The simulator results are separate from real AWS operational metrics.
+
+### Singapore normal and exam month estimates
+
+```mermaid
+xychart-beta
+    title "Singapore normal and exam month estimates"
+    x-axis [Normal, Exam]
+    y-axis "USD per month" 0 --> 166.5
+    bar [83.09, 138.71]
+```
+### Normal-month regional cost comparison
+
+```mermaid
+xychart-beta
+    title "Normal-month regional cost comparison"
+    x-axis [Singapore, Mumbai]
+    y-axis "USD per month" 0 --> 99.7
+    bar [83.09, 77.84]
+```
+### Normal-month EC2 purchasing comparison
+
+```mermaid
+xychart-beta
+    title "Normal-month EC2 purchasing comparison"
+    x-axis [OnDemand, SavingsPlan]
+    y-axis "USD per month" 0 --> 13.4
+    bar [11.18, 6.94]
+```
+### S3 storage lifecycle comparison
+
+```mermaid
+xychart-beta
+    title "S3 storage lifecycle comparison"
+    x-axis [Standard, Lifecycle]
+    y-axis "USD per month" 0 --> 3.0
+    bar [2.51, 0.68]
+```
+### Network scenario costs (not equivalent)
+
+```mermaid
+xychart-beta
+    title "Network scenario costs (not equivalent)"
+    x-axis [TwoNAT, PrivateLink]
+    y-axis "USD per month" 0 --> 104.1
+    bar [86.72, 19.08]
+```
+The network figures represent **different connectivity capabilities**, so their $67.64 difference is not a guaranteed saving. The 100 GB S3 comparison assumes a fixed storage mix, not five years of accumulated records.
+
+### Calculator and network evidence
+
+![Two NAT Gateways: calculator configuration and estimated cost](../evidence/cost-calculator/nat-gateway-calculation.png)
+
+*Two NAT Gateways: calculator configuration and estimated cost.*
+Calculator CSV files: [Singapore normal month](../evidence/cost-calculator/Normal%20Month%20Estimate%20-%20Singapore.csv), [Singapore exam month](../evidence/cost-calculator/exam-month-estimate.csv), [Mumbai normal month](../evidence/cost-calculator/Normal%20Month%20Estimate%20-%20Mumbai.csv), [EC2 Savings Plan](../evidence/cost-calculator/optimization-1-ec2-savings-plan.csv), [PrivateLink](../evidence/cost-calculator/private-link-optimization.csv), and [S3 lifecycle](../evidence/cost-calculator/s3-lifecycle-optimized-estimate.csv).
+
+### Bhutan-origin latency evidence
+
+![CloudPing measurement, run 1](../evidence/ping-test1.png)
+
+*CloudPing measurement, run 1.*
+![CloudPing measurement, run 2](../evidence/pint-test2.png)
+
+*CloudPing measurement, run 2.*
+![CloudPing measurement, run 3](../evidence/pint-test3.png)
+
+*CloudPing measurement, run 3.*
+Three recorded runs produced averages of **117.07 ms for Singapore** and **129.34 ms for Mumbai**. Browser-based measurements are indicative, not an application SLA.
+
+### Architecture Lab evidence
+
+![Assignment 3 revised architecture](../architecture/screenshots/final-revised-architecture-a3.png)
+
+*Assignment 3 revised architecture.*
+The Architecture Lab displayed **$281.57/month**, a simulator-specific estimate that is not directly comparable to the $83.09 normal-month calculator baseline. The simulator's analysis reported Availability 100%, Resilience 45%, Fault Tolerance 100%, Scalability 80%, and Security & Isolation 85%. These are tool-generated scores, not independent validation.
+
+The simulator predicted database connection contention and noted configuration issues. See the [load-test report](../evidence/load-tests/load-test-report.md) and [failure-test report](../evidence/failure-tests/failure-scenarios.md) for observed simulations and limitations.
+
+**Final verdict:** Conditionally feasible based on partial costs and simulated failover. The full deployed architecture cost, real peak throughput, recovery time, and recoverable data loss remain unverified.
+
+<!-- ASSIGNMENT3_COST_SCREENSHOT_GALLERY -->
+
+## 13. AWS Pricing Calculator Screenshot Evidence
+
+The screenshots below support the cost estimates and optimization
+scenarios discussed in Sections 2, 7, and 8. All values are estimates,
+not verified AWS billing charges.
+
+### 13.1 Singapore normal-month baseline
+
+![Singapore normal-month calculator estimate](../evidence/cost-calculator/normal-month-singapore.png)
+
+### 13.2 Singapore examination-month estimate
+
+![Singapore examination-month calculator estimate](../evidence/cost-calculator/ezam-month.png)
+
+### 13.3 Mumbai normal-month regional comparison
+
+![Mumbai normal-month calculator estimate](../evidence/cost-calculator/normal-month-mumbai.png)
+
+### 13.4 EC2 Compute Savings Plan optimization
+
+![EC2 Savings Plan calculator estimate](../evidence/cost-calculator/optimization-1-ec2-savings-plan.png)
+
+### 13.5 NAT Gateway cost estimate
+
+![NAT Gateway calculator estimate](../evidence/cost-calculator/nat-gateway-calculation.png)
+
+### 13.6 AWS PrivateLink scenario estimate
+
+![AWS PrivateLink calculator estimate](../evidence/cost-calculator/private-link-optimization.png)
+
+PrivateLink is not a complete replacement for NAT Gateway internet
+egress. The two estimates are not functionally equivalent.
+
+### 13.7 S3 lifecycle storage optimization
+
+![S3 lifecycle calculator estimate](../evidence/cost-calculator/s3-lifecycle-optimized-estimate.png)
+
+This scenario illustrates potential storage savings. It does not
+establish full five-year retention compliance or include every
+possible retrieval and transition charge.
+

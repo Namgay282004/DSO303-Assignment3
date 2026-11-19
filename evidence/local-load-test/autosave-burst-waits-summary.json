@@ -1,0 +1,143 @@
+{
+    "root_group": {
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "autosave HTTP 200": {
+                    "name": "autosave HTTP 200",
+                    "path": "::autosave HTTP 200",
+                    "id": "f6f8d0ff74fda62152c469435c0c5c28",
+                    "passes": 38843,
+                    "fails": 0
+                },
+                "answer saved": {
+                    "path": "::answer saved",
+                    "id": "c8053e89ae5c38db3bcc1d2ce6908598",
+                    "passes": 38843,
+                    "fails": 0,
+                    "name": "answer saved"
+                }
+            },
+        "name": ""
+    },
+    "metrics": {
+        "data_received": {
+            "count": 17079776,
+            "rate": 284659.5008711172
+        },
+        "iteration_duration": {
+            "avg": 109.3841515906594,
+            "min": 4.764434,
+            "med": 104.64429,
+            "max": 660.418728,
+            "p(90)": 174.258341,
+            "p(95)": 244.05147210000013
+        },
+        "iterations": {
+            "count": 38843,
+            "rate": 647.3755271929098
+        },
+        "http_req_duration{expected_response:true}": {
+            "med": 104.469931,
+            "max": 660.129945,
+            "p(90)": 174.0250344,
+            "p(95)": 243.87826800000002,
+            "avg": 109.19313432536119,
+            "min": 4.625617
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "vus": {
+            "value": 1,
+            "min": 1,
+            "max": 100
+        },
+        "data_sent": {
+            "count": 16167920,
+            "rate": 269462.0841235947
+        },
+        "checks": {
+            "passes": 77686,
+            "fails": 0,
+            "thresholds": {
+                "rate>0.95": false
+            },
+            "value": 1
+        },
+        "http_req_sending": {
+            "med": 0.015193,
+            "max": 3.750072,
+            "p(90)": 0.0249458,
+            "p(95)": 0.030117500000000023,
+            "avg": 0.018721255000901035,
+            "min": 0.004044
+        },
+        "http_reqs": {
+            "count": 38843,
+            "rate": 647.3755271929098
+        },
+        "http_req_connecting": {
+            "avg": 0.0005632707566356872,
+            "min": 0,
+            "med": 0,
+            "max": 1.272537,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "http_req_blocked": {
+            "avg": 0.006126417758669451,
+            "min": 0.000954,
+            "med": 0.003761,
+            "max": 21.292219,
+            "p(90)": 0.006387,
+            "p(95)": 0.0075448000000000025
+        },
+        "http_req_waiting": {
+            "min": 4.56285,
+            "med": 104.380403,
+            "max": 659.859247,
+            "p(90)": 173.9504432,
+            "p(95)": 243.80728710000002,
+            "avg": 109.1122720408055
+        },
+        "http_req_duration": {
+            "avg": 109.19313432536119,
+            "min": 4.625617,
+            "med": 104.469931,
+            "max": 660.129945,
+            "p(90)": 174.0250344,
+            "p(95)": 243.87826800000002,
+            "thresholds": {
+                "p(95)<1000": false
+            }
+        },
+        "http_req_receiving": {
+            "max": 7.819124,
+            "p(90)": 0.09009120000000007,
+            "p(95)": 0.12090250000000007,
+            "avg": 0.062141029554874966,
+            "min": 0.010901,
+            "med": 0.047865
+        },
+        "vus_max": {
+            "value": 100,
+            "min": 100,
+            "max": 100
+        },
+        "http_req_failed": {
+            "passes": 0,
+            "fails": 38843,
+            "thresholds": {
+                "rate<0.05": false
+            },
+            "value": 0
+        }
+    }
+}
