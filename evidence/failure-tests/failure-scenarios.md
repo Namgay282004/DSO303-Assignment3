@@ -1,4 +1,4 @@
-# DSO303 Assignment 3 — Failure Scenarios and Recovery Evidence
+# DSO303 Assignment 3 : Failure Scenarios and Recovery Evidence
 
 **Status:** Test plan; measurements must be entered from actual runs.  
 **Primary pricing Region:** Singapore (`ap-southeast-1`).  
@@ -14,7 +14,7 @@ For each scenario, record the last successfully persisted answer timestamp (`T_l
 - If no recovery or persistence evidence exists, enter **Not measured**, not **Pass**.
 - Capture the configuration, injected fault, application failure, recovery action, timestamps, and recovered records. Do not rely only on architecture screenshots.
 
-## Scenario 1 — AZ-A outage
+## Scenario 1 : AZ-A outage
 
 **Affected components:** API instance in AZ-A, marking worker in AZ-A, possibly the RDS primary if hosted there.  
 **Expected impact:** ALB should route to a healthy AZ-B instance if one exists and has enough capacity; database failover may temporarily interrupt writes.  
@@ -37,7 +37,7 @@ For each scenario, record the last successfully persisted answer timestamp (`T_l
 
 **Evidence:** `evidence/failure-tests/01-az-a-before.png`, `01-az-a-failure.png`, `01-az-a-recovery.png`, `01-az-a-data-check.png`.
 
-## Scenario 2 — AZ-B outage
+## Scenario 2 : AZ-B outage
 
 **Expected impact:** Traffic should continue through AZ-A if adequate capacity exists; loss of the standby AZ may reduce redundancy.  
 **Likely fix:** Health checks, cross-AZ Auto Scaling, adequate minimum capacity, and alarm notification.  
@@ -55,7 +55,7 @@ For each scenario, record the last successfully persisted answer timestamp (`T_l
 
 **Evidence:** `evidence/failure-tests/02-az-b-before.png`, `02-az-b-failure.png`, `02-az-b-recovery.png`, `02-az-b-data-check.png`.
 
-## Scenario 3 — RDS primary failure / failover
+## Scenario 3 : RDS primary failure / failover
 
 **Expected impact:** Temporary database connection failures; API writes may pause until RDS failover and connection recovery.  
 **Likely fix:** RDS Multi-AZ, retry with backoff, connection re-establishment, alarms, and restore testing.  
@@ -73,7 +73,7 @@ For each scenario, record the last successfully persisted answer timestamp (`T_l
 
 **Evidence:** `evidence/failure-tests/03-rds-before.png`, `03-rds-failover.png`, `03-rds-recovery.png`, `03-rds-data-check.png`.
 
-## Scenario 4 — API instance failure / insufficient healthy capacity
+## Scenario 4 : API instance failure / insufficient healthy capacity
 
 **Expected impact:** With one instance, API availability may be interrupted until replacement starts; with two healthy instances, ALB may continue serving requests.  
 **Likely fix:** Multi-AZ minimum healthy capacity, ALB target health checks, Auto Scaling replacement, and a tested startup procedure.  
@@ -91,13 +91,3 @@ For each scenario, record the last successfully persisted answer timestamp (`T_l
 
 **Evidence:** `evidence/failure-tests/04-api-before.png`, `04-api-failure.png`, `04-api-recovery.png`, `04-api-data-check.png`.
 
-## Consolidated results (fill only after testing)
-
-| Scenario | RPO observed | RTO observed | RPO pass? | RTO pass? | Fix and retest |
-|---|---|---|---|---|---|
-| AZ-A outage | Not measured | Not measured | Not assessed | Not assessed | Pending |
-| AZ-B outage | Not measured | Not measured | Not assessed | Not assessed | Pending |
-| RDS failover | Not measured | Not measured | Not assessed | Not assessed | Pending |
-| API instance failure | Not measured | Not measured | Not assessed | Not assessed | Pending |
-
-**Interpretation:** Until measurements are entered, the five-minute RPO and one-hour RTO remain unverified.

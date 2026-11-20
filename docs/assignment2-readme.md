@@ -213,15 +213,15 @@ The following screenshots are original AWS Console captures of the deployed conf
 
 | Component | Evidence |
 |---|---|
-| VPC and six subnets in two AZs | [VPC resource map](evidence/aws-deployment/vpc-resource-map.png), [subnet list](evidence/aws-deployment/vpc-subnets.png) |
-| RDS PostgreSQL Multi-AZ | [RDS configuration](evidence/aws-deployment/rds-multi-az.png) |
-| EC2 Auto Scaling | [ASG details](evidence/aws-deployment/auto-scaling-group.png), [healthy instance](evidence/aws-deployment/ec2-instance.png) |
-| ALB and target group | [Resource map](evidence/aws-deployment/alb-resource-map.png), [healthy target](evidence/aws-deployment/alb-target-group.png) |
-| 40 MB S3 objects | [S3 submission objects](evidence/aws-deployment/s3-submissions.png) |
-| SQS and DLQ | [Main queue](evidence/aws-deployment/sqs-marking-queue.png), [DLQ](evidence/aws-deployment/sqs-dead-letter-queue.png) |
-| CloudFront and ECR | [CloudFront](evidence/aws-deployment/cloudfront-distribution.png), [ECR images](evidence/aws-deployment/ecr-images.png) |
-| Automatic deployment | [GitHub Actions success](evidence/cicd/github-actions-success.png) |
-| Background assignment processing | [Database verification](evidence/aws-deployment/assignment-processing-test.md) |
+| VPC and six subnets in two AZs | [VPC resource map](../evidence/aws-deployment/vpc-resource-map.png), [subnet list](../evidence/aws-deployment/vpc-subnets.png) |
+| RDS PostgreSQL Multi-AZ | [RDS configuration](../evidence/aws-deployment/rds-multi-az.png) |
+| EC2 Auto Scaling | [ASG details](../evidence/aws-deployment/auto-scaling-group.png), [healthy instance](../evidence/aws-deployment/ec2-instance.png) |
+| ALB and target group | [Resource map](../evidence/aws-deployment/alb-resource-map.png), [healthy target](../evidence/aws-deployment/alb-target-group.png) |
+| 40 MB S3 objects | [S3 submission objects](../evidence/aws-deployment/s3-submissions.png) |
+| SQS and DLQ | [Main queue](../evidence/aws-deployment/sqs-marking-queue.png), [DLQ](../evidence/aws-deployment/sqs-dead-letter-queue.png) |
+| CloudFront and ECR | [CloudFront](../evidence/aws-deployment/cloudfront-distribution.png), [ECR images](../evidence/aws-deployment/ecr-images.png) |
+| Automatic deployment | [GitHub Actions success](../evidence/cicd/github-actions-success.png) |
+| Background assignment processing | [Database verification](../evidence/aws-deployment/assignment-processing-test.md) |
 
 The AWS screenshots establish resource configuration; application test records provide separate evidence of functional behavior.
 

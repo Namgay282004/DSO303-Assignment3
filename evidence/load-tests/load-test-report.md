@@ -1,4 +1,4 @@
-# Assignment 3 — Load Simulation, Bottleneck Analysis, and Proposed Fix
+# Assignment 3 : Load Simulation, Bottleneck Analysis, and Proposed Fix
 
 ## Workload objective
 
@@ -36,12 +36,12 @@ The Architecture Analysis identified **database connection and throughput conten
 
 *Architecture Analysis: predicted database contention.*
 
-### Proposed mitigation — not deployed
+### Proposed mitigation : not deployed
 
 Consider application-side PostgreSQL connection pooling, query/index optimization, or **RDS Proxy** if connection spikes warrant its additional expense. Recheck costs, application connection limits, and security. A genuine fix/retest would require the same workload before and after deployment with measured throughput, errors, p95, and RDS/ALB/EC2 metrics.
 
-**Fix applied:** None.  
-**Measured before/after improvement:** Not available.  
+**Production-safe fix applied:** None.  
+**Measured experimental improvement:** Yes, in the isolated local database; rejected for production durability.  
 **CloudWatch load-test evidence:** Not collected.  
 **Peak-load requirement verified:** No.
 
@@ -62,16 +62,11 @@ The simulator reported Availability **100%**, Resilience **45%**, Fault Toleranc
 ## Two additional reasoned scenarios
 
 ### Concurrent autosave surge
-Thousands of students may save answers together. **Expected risk:** elevated RDS connections, write latency, or failed saves. **Proposed mitigation:** bounded connection pools, indexed writes, safe retry/idempotency, and durable acknowledgements. Test autosave against the five-minute RPO objective. **Not measured.**
+Thousands of students may save answers together. **Expected risk:** elevated RDS connections, write latency, or failed saves. **Proposed mitigation:** bounded connection pools, indexed writes, safe retry/idempotency, and durable acknowledgements. Test autosave against the five-minute RPO objective. **Partially investigated through local k6 testing (up to 100 VUs), not at the required 3,000-student scale.**
 
 ### Submission and marking surge
 Simultaneous submissions may increase SQS queue depth and marking delay. **Expected risk:** worker backlog and delayed result processing. **Proposed mitigation:** SQS buffering, worker scaling, DLQ, retries, and idempotent processing. **Not measured.**
 
-## Conclusion
-
-The screenshots support **simulated successful request routing at several configured load levels** and a **predicted database contention risk**. They do not satisfy the rubric's strongest requirement of a **CloudWatch-proven bottleneck, applied fix, and equivalent retest**. The platform's actual peak-load capacity remains unverified.
-
-<!-- ASSIGNMENT3_LOCAL_K6_RESULTS -->
 
 ## Local k6 Load Testing and PostgreSQL Bottleneck Investigation
 
@@ -208,4 +203,9 @@ or RTO.
 The experimental configuration improved measured performance but
 was rejected for durability reasons. A production-safe optimization
 has not yet been implemented and retested.
+
+## Conclusion
+
+The screenshots support **simulated successful request routing at several configured load levels** and a **predicted database contention risk**. They do not satisfy the rubric's strongest requirement of a **CloudWatch-proven bottleneck, production-safe applied fix, and equivalent retest**. The local experiment below is not an AWS deployment fix. The platform's actual peak-load capacity remains unverified.
+
 

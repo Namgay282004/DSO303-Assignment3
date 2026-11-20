@@ -1,0 +1,10 @@
+HTTP 200 | DNS 0.066308s | Connect 0.129613s | First byte 0.194001s | Total 0.194054s
+HTTP 200 | DNS 0.014498s | Connect 0.098734s | First byte 0.199128s | Total 0.199188s
+HTTP 200 | DNS 0.015650s | Connect 0.089142s | First byte 0.167003s | Total 0.167056s
+HTTP 200 | DNS 0.004612s | Connect 0.072915s | First byte 0.161231s | Total 0.161303s
+HTTP 200 | DNS 0.006294s | Connect 0.071422s | First byte 0.146423s | Total 0.146487s
+HTTP 200 | DNS 0.016570s | Connect 0.076951s | First byte 0.144587s | Total 0.144639s
+HTTP 200 | DNS 0.078786s | Connect 0.150374s | First byte 0.209628s | Total 0.209684s
+HTTP 200 | DNS 0.006564s | Connect 0.067632s | First byte 0.123053s | Total 0.123111s
+HTTP 200 | DNS 0.006167s | Connect 0.064443s | First byte 0.122807s | Total 0.122901s
+HTTP 200 | DNS 0.006081s | Connect 0.059062s | First byte 0.154790s | Total 0.154845s

@@ -1,4 +1,4 @@
-# Assignment 3 — Failure Scenarios and Simulation Results
+# Assignment 3 : Failure Scenarios and Simulation Results
 
 **Environment:** AWS Architecture Lab simulation of the revised university examination architecture.  
 **Test request:** `GET /api/exams/current`, with route-table and gateway assumptions enabled.  
@@ -21,7 +21,7 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 | RDS primary failed | Simulator modeled Multi-AZ database failover | HTTP 200; 8/8 steps; 134 ms | Not measured |
 | API EC2 in AZ-A failed | ALB trace routed to AZ-B API EC2 | HTTP 200; 9/9 steps; 134 ms | Not measured |
 
-## Scenario 1 — Availability Zone A outage
+## Scenario 1 : Availability Zone A outage
 
 **Expected impact:** AZ-A application and possibly database primary become unavailable.  
 **Observed:** Successful modeled rerouting to AZ-B and simulated RDS failover.  
@@ -31,7 +31,7 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 
 *AZ-A outage: successful modeled request trace.*
 
-## Scenario 2 — Availability Zone B outage
+## Scenario 2 : Availability Zone B outage
 
 **Expected impact:** AZ-B compute becomes unavailable; remaining AZ must serve requests.  
 **Observed:** Successful modeled request through AZ-A.  
@@ -41,7 +41,7 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 
 *AZ-B outage: successful modeled request trace.*
 
-## Scenario 3 — RDS primary failure
+## Scenario 3 : RDS primary failure
 
 **Expected impact:** Database connections may briefly fail while standby is promoted.  
 **Observed:** The simulator indicated Multi-AZ automated failover; the modeled request returned HTTP 200.  
@@ -54,7 +54,7 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 
 *RDS failover simulation result.*
 
-## Scenario 4 — EC2 application instance failure
+## Scenario 4 : EC2 application instance failure
 
 **Expected impact:** ALB must avoid the failed target; capacity may be reduced.  
 **Observed:** The modeled request trace successfully routed to AZ-B and returned HTTP 200. A separate simulator warning suggested that redundant compute was unavailable and a 502 could occur; this **conflicts with the successful trace** and is reported as a simulator inconsistency.  

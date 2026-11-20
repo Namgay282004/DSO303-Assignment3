@@ -192,7 +192,7 @@ The separate PrivateLink estimate costs **USD 19.08 per month** for one interfac
 
 These options are not functionally equivalent: PrivateLink supports connectivity to compatible services, while NAT Gateways may still be required for general outbound internet access. An S3 Gateway Endpoint is proposed for applicable S3 traffic. The modeled difference is **not guaranteed net savings**, and neither network scenario is included in the USD 83.09 / USD 138.71 workload baseline.
 
-**Evidence:** Expanded NAT Gateway calculator screenshot and the separate PrivateLink CSV export. The NAT screenshot should be retained under `evidence/cost-optimizations/` using its actual saved filename.
+**Evidence:** Expanded NAT Gateway calculator screenshot and the separate PrivateLink CSV export. The NAT calculator screenshot is retained at `evidence/cost-calculator/nat-gateway-calculation.png`.
 
 ### 4.3 CloudWatch Logs
 
@@ -1228,4 +1228,3 @@ egress. The two estimates are not functionally equivalent.
 This scenario illustrates potential storage savings. It does not
 establish full five-year retention compliance or include every
 possible retrieval and transition charge.
-

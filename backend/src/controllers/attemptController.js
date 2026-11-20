@@ -136,22 +136,43 @@ exports.saveAnswer = async (req, res) => {
        DO UPDATE SET
          answer_text = EXCLUDED.answer_text,
          saved_at = NOW()
+       WHERE answers.answer_text IS DISTINCT FROM EXCLUDED.answer_text
        RETURNING *`,
       [attempt_id, question_id, answer_text]
     );
 
+    let savedAnswer = result.rows[0];
+    let unchanged = false;
+
     if (result.rowCount === 0) {
-      await client.query("ROLLBACK");
-      return res.status(400).json({
-        error: "Question does not belong to this exam"
-      });
+      // The conditional UPSERT may skip an unchanged answer.
+      // Check whether the answer already exists.
+      const existing = await client.query(
+        `SELECT id, attempt_id, question_id, answer_text, saved_at
+         FROM answers
+         WHERE attempt_id = $1
+           AND question_id = $2
+           AND answer_text IS NOT DISTINCT FROM $3`,
+        [attempt_id, question_id, answer_text]
+      );
+
+      if (existing.rowCount === 0) {
+        await client.query("ROLLBACK");
+        return res.status(400).json({
+          error: "Question does not belong to this exam"
+        });
+      }
+
+      savedAnswer = existing.rows[0];
+      unchanged = true;
     }
 
     await client.query("COMMIT");
 
     return res.status(200).json({
       message: "Answer saved",
-      answer: result.rows[0]
+      answer: savedAnswer,
+      unchanged
     });
   } catch (error) {
     if (client) {

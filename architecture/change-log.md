@@ -1,4 +1,4 @@
-# Assignment 3 — Architecture Change Log
+# Assignment 3 : Architecture Change Log
 
 ## 1. Overview
 
