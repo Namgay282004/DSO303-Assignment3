@@ -1,289 +1,117 @@
-# DSO303 Assignment 3 : Final Technical Report
-
-**Cost, Feasibility and Resilience Analysis | University Examination Platform**  
-**Primary design and pricing Region:** Asia Pacific (Singapore), `ap-southeast-1`  
-**Actual AWS performance-test Region:** Asia Pacific (Mumbai), `ap-south-1`  
-
+# DSO303 Assignment 3 : Cost, Feasibility and Resilience Analysis
 
 ## Executive summary
 
-This report assesses the cost, scalability, fault tolerance and operational feasibility of the examination system implemented in Assignment 2. The assignment requires **10 normal months at 300–500 concurrent users**, **two exam months with 3,000 students starting an exam within five minutes**, an **annual-average monthly budget of USD 1,000**, **RPO ≤ 5 minutes**, **RTO ≤ 60 minutes**, **survival of one Availability Zone failure**, and **five-year file retention**.
+This assessment examines the Assignment 2 university examination platform against five requirements: a $1,000 annual-average monthly budget, 300–500 concurrent users in 10 normal months, 3,000 exam starts within five minutes in two exam months, recovery point objective (RPO) no greater than five minutes, recovery time objective (RTO) no greater than one hour, one-AZ fault tolerance and five-year file retention.
 
-**Overall assessment : technically feasible within the evaluated architecture and cost model, with defined production-readiness considerations.** The Singapore calculator model is below the budget (**$83.09 normal month; $138.71 exam month; $1,108.32 annual partial estimate**), but this is a *partial priced configuration*, not a complete, validated two-AZ production bill. Four modeled failure scenarios returned successful request traces; however, elapsed recovery time and data loss were not timed in simulator. Real AWS k6 tests passed their defined thresholds. A CPU target-tracking policy was subsequently configured and the original ramped test repeated, with a lower observed p95, but **no scale-out event was recorded**, so causality cannot be attributed to scaling.
+**Verdict: promising but conditionally feasible, not fully production-verified.** The partial Singapore calculator model costs **$83.09 per normal month** and **$138.71 per exam month**, or **$1,108.32/year** (**$92.36/month** annualized). These are **partial calculator estimates**, not a fully costed production two-AZ deployment. A local 3,000-exam-start retest completed with **3,000 HTTP 201 responses**, zero failed requests and **19.13 ms p95**, but it does not establish equivalent throughput in the deployed AWS environment. Four modeled fault scenarios succeeded in AWS Architecture Lab, but the simulator's 134 ms trace duration is **not** a measured failover RTO. Local recovery drills demonstrated retained committed data and rapid restart, without establishing a production RPO/RTO guarantee.
 
-### Decision summary
+## 1. Requirement-by-requirement decision
 
-| Requirement | Evidence-based assessment | Decision |
+| Requirement | Recorded evidence | Assessment |
 |---|---|---|
-| Annual-average budget ≤ $1,000/month | $92.36/month averaged from partial calculator estimates | **Below budget in the calculator model** |
-| 3,000 exam starts within five minutes | ~10 exam starts/s required; not tested end-to-end at this concurrency | **Design target assessed; live acceptance testing recommended** |
-| Survive one AZ loss | Simulated AZ-A and AZ-B paths returned HTTP 200 | **Successful simulated AZ-failure routing** |
-| RPO ≤ 5 minutes | Architecture and simulation evidence documents recovery paths; quantitative RPO requires timestamped persistence checks | **Design target assessed; live acceptance testing recommended** |
-| RTO ≤ 60 minutes | Successful modeled alternate paths; quantitative RTO requires timed recovery checks | **Design target assessed; live acceptance testing recommended** |
-| Five-year file retention | Five-year lifecycle storage strategy modeled and costed | **Lifecycle strategy evaluated** |
-| Load bottleneck, fix, retest | CloudWatch investigated; CPU scaling policy added; equivalent k6 retest completed | **Scaling policy implemented; comparable retest completed** |
+| Annual-average budget ≤ $1,000/month | Partial calculator average $92.36/month | **Conditional:** full HA bill and hidden costs still needed |
+| 3,000 exam starts / five minutes | Local k6 retest: 3,000/3,000 HTTP 201, p95 19.13 ms, ~300 s | **Met in the local test only** |
+| Survive one AZ loss | AZ-A and AZ-B simulator routes both HTTP 200 | **Supported by model; live AWS AZ loss not tested** |
+| RPO ≤ 5 minutes | Committed exam answer survived local restarts; archived WAL recovered post-backup marker | **Recovery mechanism demonstrated; production bound unproven** |
+| RTO ≤ 60 minutes | Local backend 7.737 s; answer recovery 8.675 s; PostgreSQL 7.345 s; WAL startup-to-writable 7.066 s | **Local components passed; end-to-end production RTO unproven** |
+| Files retained five years | S3 lifecycle and archive cost scenarios evaluated | **Retention policy/restore validation still required** |
 
-## 1. Assignment scope and method
+## 2. Method and evidence boundaries
 
-Evidence is divided into four types to avoid overstating results: **(A) Pricing Calculator exports** for Singapore and Mumbai; **(B) AWS Architecture Lab simulations** for load/fault paths; **(C) local isolated PostgreSQL/k6 tests** for authenticated autosave; and **(D) real AWS Mumbai ALB, EC2 and CloudWatch observations**. These sources answer different questions and are not interchangeable. Simulator response time is not actual production latency; local database throughput is not proof of deployed AWS capacity.
+- **AWS Pricing Calculator:** planning estimates for Singapore normal/exam months and Mumbai normal month; not actual invoices.
+- **AWS Architecture Lab:** modeled routing, simulated load and four injected faults; not real recovery elapsed times.
+- **Local Docker and k6:** real HTTP requests, authenticated exam starts/autosave, PostgreSQL backup/recovery; not deployed AWS throughput.
+- **Real AWS Mumbai:** read-only ALB/EC2/CloudWatch monitoring, k6 tests, and a CPU target-tracking policy; not a Singapore two-AZ acceptance test.
 
-## 2. Revised architecture and change rationale
+These categories are not interchangeable. Each result below names its test environment.
 
-The proposed design retains an ALB, EC2 Auto Scaling, PostgreSQL RDS Multi-AZ, S3 object storage, SQS asynchronous marking and CloudWatch monitoring. Cost controls include compute purchasing commitments, service-specific private endpoints and S3 lifecycle transitions. Proposed two-AZ redundancy should not be confused with the observed Mumbai deployment of **one** running API EC2 instance.
+## 3. Architecture and single points of failure
 
-![Revised cost-optimized architecture and intended availability boundaries](architecture/screenshots/final-revised-architecture-a3.png)
+The proposed target uses ALB, EC2 Auto Scaling across two AZs, PostgreSQL RDS Multi-AZ, S3 object storage, SQS asynchronous marking with DLQ, and CloudWatch monitoring. Cost controls include Savings Plans for eligible steady compute, S3 lifecycle transitions, and targeted VPC endpoints where they replace eligible NAT traffic. The target design should maintain healthy capacity in **both** AZs, health-based ALB routing, tested DB failover, backups and recovery runbooks.
 
-*Figure 1: Revised cost-optimized architecture and intended availability boundaries.*
+The observed Mumbai test environment had **one active API EC2 instance**, so it was **not equivalent** to the proposed two-AZ deployment. A CPU target-tracking policy was added (50% CPU, 180 s warmup, min 1 / desired 1 / max 2), but no demand-driven scale-out was observed. See [architecture change log](architecture/change-log.md), [architecture resilience analysis](architecture/peak-load-and-az-resilience.md) and [fault scenarios](infra/failure-scenarios.md).
 
-**Design trade-off:** A single application instance minimizes baseline compute cost but cannot independently survive its AZ's loss. To meet the resilience objective in a live deployment, maintain independently healthy capacity in two AZs, test ALB routing and verify RDS failover. The 50%-CPU target-tracking policy added on 20 November improves *potential* elastic capacity but does not itself guarantee instant AZ survivability.
+![Revised architecture](architecture/screenshots/final-revised-architecture-a3.png)
 
-**Accepted / unresolved single points of failure:** one active API target; database write-primary failover interval; client network and authentication dependencies; and any single-region failure. See [`architecture/change-log.md`](../architecture/change-log.md) for a decision-by-decision comparison against Assignment 2.
+*Figure 1. Proposed revised architecture; the image is retained in the original repository.*
 
-## 3. Financial analysis and calculator evidence
+## 4. Cost and service feasibility
 
-### 3.1 Normal and examination profiles
+| Scenario | Region | Monthly partial estimate |
+|---|---|---:|
+| Normal month | Singapore | $83.09 |
+| Exam month | Singapore | $138.71 |
+| Normal month | Mumbai | $77.84 |
 
-| Model | Region | Estimated monthly cost | Basis |
-|---|---|---:|---|
-| Normal month | Singapore | **$83.09** | Calculator export, 300–500 concurrent-user planning profile |
-| Exam month | Singapore | **$138.71** | Calculator export, 3,000 starts/5 minutes planning profile |
-| Normal month | Mumbai | **$77.84** | Regional comparison estimate |
+**Annual partial estimate:** `10 × $83.09 + 2 × $138.71 = $1,108.32`; average `$1,108.32 / 12 = $92.36/month`. Singapore's normal-month model is **$5.25/month** above Mumbai. Bhutan-origin three-run network measurements previously summarized in the repository average about **117.07 ms Singapore** and **129.34 ms Mumbai**; these are indicative network latency samples, not application response-time guarantees.
 
-**Annual calculation:** `10 × $83.09 + 2 × $138.71 = $1,108.32`; annual-average month `= $92.36`. These values are estimates, not billing statements. The estimate does not fully cost all proposed multi-AZ standby capacity, transfer, backup growth, logging, KMS requests, or five-year retention accumulation. Therefore, it is not evidence that a fully resilient production design would cost only $92.36/month.
+**Modeled optimizations:** Compute Savings Plan **$4.24/month lower** on the compared EC2 line ($11.18 → $6.94); NAT versus selected PrivateLink model **$67.64/month difference** ($86.72 → $19.08), **not equivalent network functionality**; S3 lifecycle scenario **$1.83/month lower** under its modeled assumptions. **Do not sum** these as a production net saving. The cost report covers hidden costs, top drivers and at least four service choices: [cost report](docs/cost-report.md).
 
-![Singapore normal-month AWS Pricing Calculator estimate](evidence/cost-calculator/normal-month-singapore.png)
+**Cost qualification:** Include complete two-AZ compute and RDS, ALB usage, NAT hourly/processing, cross-AZ/Internet data transfer, CloudWatch Logs, KMS, backup growth and five-year S3 retention before making a binding budget claim. Cost per student cannot be stated reliably without a documented student population and allocation period; see the formula in the cost report.
 
-*Figure 2 : Singapore normal-month AWS Pricing Calculator estimate.*
+## 5. Four failure scenarios — Architecture Lab
 
-![Singapore examination-month AWS Pricing Calculator estimate](evidence/cost-calculator/ezam-month.png)
-
-*Figure 3 : Singapore examination-month AWS Pricing Calculator estimate.*
-
-![Mumbai normal-month regional cost comparison](evidence/cost-calculator/normal-month-mumbai.png)
-
-*Figure 4 : Mumbai normal-month regional cost comparison.*
-
-### 3.2 Cost drivers and hidden costs
-
-The priced compute, database and network components are material cost drivers; exact ranking depends on the chosen calculator configuration. **RDS** is driven by Multi-AZ standby, storage and backups; **NAT/networking** by hourly gateways plus processed GB; **compute** by baseline EC2 hours and examination scale. Costs that must be included in a full deployment estimate are: Internet data transfer out; NAT processed GB and per-AZ hourly charges; CloudWatch log ingestion/retention; KMS API calls and key charges; RDS backup storage beyond free allocation; S3 object count, storage classes, retrieval and five-year growth; ALB processing; and interface endpoint hourly/GB charges. The existing calculator exports do not verify all of these as fully included.
-
-### 3.3 Service choice comparison
-
-| Decision | Selected / evaluated approach | Alternative | Performance / resilience / effort |
-|---|---|---|---|
-| Backend | EC2 + ALB + Auto Scaling | Lambda or ECS Fargate | EC2 supports persistent API and familiar deployment; Lambda can scale rapidly but requires stateless execution and database connection controls; Fargate reduces host operations but changes cost model |
-| Transactional answers | PostgreSQL RDS Multi-AZ | Aurora Serverless v2 or DynamoDB | PostgreSQL supports relational transactions and familiar schema; Aurora may offer variable capacity at different cost; DynamoDB requires access-pattern redesign |
-| Private egress | NAT plus S3 Gateway Endpoint where appropriate | Interface VPC endpoints / PrivateLink | S3 Gateway Endpoint avoids NAT for supported S3 routes; interface endpoints have their own hourly/GB charges and **do not replace all Internet NAT egress** |
-| Compute purchasing | On-Demand baseline | 1-year Compute Savings Plan | Commitment lowers eligible steady compute cost but reduces flexibility; not a resilience feature |
-| Retention | S3 Standard | Glacier Deep Archive lifecycle | Lower storage cost for cold objects but retrieval is slower, incurs charges and needs retention/access policy |
-
-### 3.4 Three evaluated optimization scenarios
-
-| Scenario | Baseline | Alternative | Modeled change | Qualification |
-|---|---:|---:|---:|---|
-| 1-year EC2 Compute Savings Plan | $11.18/month | $6.94/month | **$4.24/month lower** (~37.9%) | Commitment and coverage dependent |
-| Two NAT Gateways vs selected PrivateLink configuration | $86.72/month | $19.08/month | **$67.64/month modeled difference** | **Not functionally equivalent**; cannot claim as guaranteed net savings |
-| S3 lifecycle / Deep Archive | See source calculator export | See optimized export | **$1.83/month modeled saving** | Depends on storage volume, object age and retrieval assumptions |
-
-These scenarios use different assumptions and cannot simply be added together to promise a new production total.
-
-![One-year Compute Savings Plan scenario](evidence/cost-calculator/optimization-1-ec2-savings-plan.png)
-
-*Figure 5 : One-year Compute Savings Plan scenario.*
-
-![Two-NAT-Gateway cost scenario](evidence/cost-calculator/nat-gateway-calculation.png)
-
-*Figure 6 : Two-NAT-Gateway cost scenario.*
-
-![PrivateLink endpoint scenario with different traffic coverage](evidence/cost-calculator/private-link-optimization.png)
-
-*Figure 7 : PrivateLink endpoint scenario with different traffic coverage.*
-
-![Lifecycle transition estimate for older S3 objects](evidence/cost-calculator/s3-lifecycle-optimized-estimate.png)
-
-*Figure 8 : Lifecycle transition estimate for older S3 objects.*
-
-### 3.5 Region and Bhutan-origin latency
-
-The Singapore normal-month partial estimate is **$5.25/month higher** than Mumbai. Three Bhutan-origin CloudPing runs previously summarized averaged approximately **117.07 ms to Singapore** and **129.34 ms to Mumbai**. This small sample is indicative, not an SLA or a full application response-time benchmark. Singapore remains the mandated primary design/pricing Region; the existing Mumbai AWS account was used for actual performance tests and must not be represented as a Singapore deployment.
-
-![Bhutan-origin network latency measurement, first test](evidence/ping-test1.png)
-
-*Figure 9 : Bhutan-origin network latency measurement, first test.*
-
-![Bhutan-origin network latency measurement, second test](evidence/pint-test2.png)
-
-*Figure 10 : Bhutan-origin network latency measurement, second test.*
-
-![Bhutan-origin network latency measurement, third test](evidence/pint-test3.png)
-
-*Figure 11 : Bhutan-origin network latency measurement, third test.*
-
-## 4. Resilience and failure testing
-
-**Method:** The AWS Architecture Lab simulator injected failures into the modeled two-AZ architecture and executed `GET /api/exams/current`. The healthy trace returned HTTP 200 with 9/9 modeled steps and 134 ms displayed duration. A successful simulator trace demonstrates modeled routing, **not** actual RTO/RPO compliance.
-
-| ID | Failure injected | Observed model behavior | Expected impact / mitigation |
-|---|---|---|---|
-| F-01 | AZ-A outage | HTTP 200; 8/8 steps; alternate AZ-B API path; modeled DB failover | Keep live healthy targets in both AZs; test database reconnects | 
-| F-02 | AZ-B outage | HTTP 200; 9/9 steps; AZ-A API path | Ensure AZ-A spare capacity and ALB health checks |
-| F-03 | RDS primary failure | HTTP 200; 8/8 steps; modeled RDS Multi-AZ failover | Transaction retry/reconnect; backup/PITR testing | N
-| F-04 | API EC2 AZ-A failure | HTTP 200; 9/9 steps; traffic routed to AZ-B | Multi-AZ targets, ASG replacement and health checks | 
-
-
-
-![Healthy baseline request trace](evidence/failure-tests/01-healthy-baseline-part2.png)
-
-*Figure 12 : Healthy baseline request trace.*
-
-![Scenario F-01: AZ-A outage routed through alternate availability zone](evidence/failure-tests/02-az-a-outage-part2.png)
-
-*Figure 13 : Scenario F-01: AZ-A outage routed through alternate availability zone.*
-
-![Scenario F-02: AZ-B outage routed through remaining zone](evidence/failure-tests/03-az-b-outage-part2.png)
-
-*Figure 14 : Scenario F-02: AZ-B outage routed through remaining zone.*
-
-![Scenario F-03: RDS primary failure simulation result](evidence/failure-tests/04-rds-primary-result-part2.png)
-
-*Figure 15 : Scenario F-03: RDS primary failure simulation result.*
-
-![Scenario F-04: API EC2 failure simulation result](evidence/failure-tests/05-ec2-failover-part2.png)
-
-*Figure 16 : Scenario F-04: API EC2 failure simulation result.*
-
-The four fault scenarios satisfy the *scenario count* and provide expected impact and fixes. The target design can plausibly recover from an AZ loss, but real-world survivability remains conditional on active multi-AZ capacity, DB failover configuration and tested application reconnection.
-
-## 5. Load, bottleneck and performance investigation
-
-### 5.1 Architecture Lab modeled load
-
-Simulated requests at 1, 10 and 100 requests/s (including 10×/100× modeled spikes) returned HTTP 200 with the same 134 ms modeled duration. These are simulator settings and cannot prove a sustained real throughput rate or 3,000 authenticated exam starts.
-
-![Architecture Lab low-load request trace](evidence/load-tests/01-low-load.png)
-
-*Figure 17 : Architecture Lab low-load request trace.*
-
-![Architecture Lab high-load request trace](evidence/load-tests/02-high-load.png)
-
-*Figure 18 : Architecture Lab high-load request trace.*
-
-![Architecture Lab spike-load request trace](evidence/load-tests/03-spike-load.png)
-
-*Figure 19 : Architecture Lab spike-load request trace.*
-
-![Architecture analysis warning of possible database contention](evidence/load-tests/database-bottleneck.png)
-
-*Figure 20 : Architecture analysis warning of possible database contention.*
-
-### 5.2 Local authenticated autosave tests
-
-Tests ran against an isolated local PostgreSQL database, not the deployed AWS database. They used test identities and JWTs, with token datasets intentionally excluded from the submission.
-
-| Test | Requests | Throughput | p95 | HTTP failures |
-|---|---:|---:|---:|---:|
-| Read-only baseline, 50 VUs | 3,282 | 21.79/s | 7.43 ms | 0% |
-| Authenticated autosave, 50 VUs | 3,252 | 21.64/s | 22.14 ms | 0% |
-| Autosave stress, 100 VUs | 7,000 | 46.40/s | 19.10 ms | 0% |
-| Autosave burst, 100 VUs | 43,350 | 722.48/s | 186.89 ms | 0% |
-| Repeat burst, 100 VUs | 39,866 | 664.43/s | 218.83 ms | 0% |
-| Detailed wait monitoring, 100 VUs | 38,843 | 647.38/s | 243.87 ms | 0% |
-| Experimental `synchronous_commit=off` | 52,002 | 866.61/s | 128.96 ms | 0% |
-
-Database wait sampling showed WAL write/sync activity (282 WALWrite and 70 WALSync samples in the detailed run). A single asynchronous-commit experiment had better measured throughput and p95, but **was reverted** because it weakens acknowledged-transaction durability and may conflict with the five-minute RPO requirement. Run-to-run variability means the difference is not a definitive causal effect. This is an investigated local bottleneck, **not a production-safe AWS fix**.
-
-![Local read-only k6 baseline](evidence/local-load-test/01-baseline-results.png)
-
-*Figure 21: Local read-only k6 baseline.*
-
-![Authenticated autosave burst results](evidence/local-load-test/04-autosave-burst-results.png)
-
-*Figure 22: Authenticated autosave burst results.*
-
-![PostgreSQL WAL wait-event monitoring](evidence/local-load-test/07-postgresql-wait-events.png)
-
-*Figure 23: PostgreSQL WAL wait-event monitoring.*
-
-![Experimental asynchronous commit comparison; configuration reverted](evidence/local-load-test/08-wal-experiment-results.png)
-
-*Figure 24: Experimental asynchronous commit comparison; configuration reverted.*
-
-### 5.3 Real AWS Mumbai k6 and CloudWatch
-
-The real tests used the existing Assignment 2 ALB in Mumbai. The `/health` and `/api/exams` endpoints were read-only; no end-to-end 3,000-student autosave workflow was performed.
-
-| Run | Workload | Requests | p95 | Failures |
-|---|---|---:|---:|---:|
-| AWS health baseline | 1 VU, 60 s | 54 | 364.74 ms | 0 |
-| AWS controlled health | 5 VUs, 120 s | 541 | 370.73 ms | 0 |
-| AWS ramped investigation | Up to 10 VUs, 120 s | 531 | 650.83 ms | 1 (0.18%) |
-| AWS exam retrieval | 5 VUs, 60 s | 266 | 400.35 ms | 0 |
-| **AWS post-policy retest** | **Same ramped script, up to 10 VUs, 120 s** | **559** | **434.51 ms** | **0** |
-
-The ramped investigation had a higher p95 than the controlled health run. ALB `TargetResponseTime`, request counts and HTTP 5XX series were inspected in CloudWatch. These observations justify investigation but do not alone prove a saturated AWS resource.
-
-![Real AWS ALB metrics after controlled health load](evidence/cloudwatch/alb-cloudwatch-after-controlled-test.png)
-
-*Figure 25 : Real AWS ALB metrics after controlled health load.*
-
-![Real AWS EC2 CPU monitoring during load](evidence/cloudwatch/ec2-cpu-during-test.png)
-
-*Figure 26 : Real AWS EC2 CPU monitoring during load.*
-
-![Real AWS exam retrieval monitoring](evidence/cloudwatch/aws-exam-read-cloudwatch.png)
-
-*Figure 27 : Real AWS exam retrieval monitoring.*
-
-### 5.4 Applied optimization and identical-script retest — 20 November 2026
-
-**Change:** Created CPU-based EC2 Auto Scaling target tracking `dso303-a3-cpu-target-50` with **50% average CPU target**, **180-second instance warmup**, **minimum 1 / desired 1 / maximum 2 instances**. This is a safe *capacity-management configuration* change, not a database durability change.
-
-**Method:** Re-ran the existing `evidence/cloudwatch/aws-bottleneck-test.js` without changing its 0→5→10→0 VU stages, endpoint or 120-second duration. The retest produced **559 successful requests**, **0% failures**, **152.19 ms mean**, **434.51 ms p95**, with the configured p95 < 1,000 ms and error-rate < 1% thresholds passing.
-
-| Measure | Before policy | After policy | Observed difference |
-|---|---:|---:|---:|
-| Requests | 531 | 559 | +28 |
-| p95 | 650.83 ms | 434.51 ms | **216.32 ms lower (33.24%)** |
-| HTTP failures | 1/531 (0.18%) | 0/559 (0%) | 1 fewer observed |
-| Max VUs | 10 | 10 | Same |
-| Scale-out activity | Existing instance handled test | **No additional instance needed during retest** | Policy available for sustained CPU pressure |
-
-**Interpretation:** The second run had lower latency, but AWS activity history showed only earlier **instance-refresh** events from 16–17 November, not a demand-triggered scale-out on 20 November. The test was too light/short to prove the new scaling policy improved response time. The result supports a successful **configuration change and controlled retest**, not a proven CloudWatch bottleneck resolution. Avoid interpreting the 33.24% decrease as an Auto Scaling causal effect.
-
-**Additional raw logs held locally,** `evidence/cloudwatch/19-optimization-retest-output.txt` and `19-optimization-retest-summary.json`. The actual CloudWatch screenshot shared in this conversation has been included as `optimization-retest-cloudwatch.png`. The numerical retest values above are transcribed from the user's k6 terminal output.
-
-![CloudWatch metrics for the 20 November optimization retest](evidence/cloudwatch/optimization-retest-cloudwatch.png)
-
-*Figure 28 : Actual CloudWatch screenshot for the post-policy retest. This is the actual screenshot supplied in the conversation and included in this review ZIP.*
-
-### 5.5 Two reasoned peak-risk scenarios
-
-**Exam-start/authentication surge:** 3,000 starts in five minutes implies roughly 10 starts per second before autosave, retries, polling or resource fetches. Risks include authentication bursts, ALB/EC2 queueing and database connection exhaustion. A safe validation requires 3,000 realistic login/start sessions and p95/error/DB connection measurements.
-
-**Autosave/marking surge:** Frequent answer saves can create WAL write pressure; submissions can queue marking jobs. Monitor PostgreSQL connections, commit latency, SQS age/depth and DLQ activity. Consider bounded pooling, batching and worker concurrency tuning before adopting changes that weaken durability.
-
-## 6. Feasibility verdict and limitations
-
-| Goal | Verdict | What would close the evidence gap |
+| Scenario | Modeled outcome | Evidence |
 |---|---|---|
-| Budget | **Promising for partial priced scope** | Complete two-AZ Singapore calculator including hidden charges and retention growth |
-| Peak performance | **Capacity planning assessed** | Full 3,000-start scenario with realistic autosave and submission behavior is a future acceptance benchmark |
-| One-AZ survival | **Simulated successfully** | Live failover with ≥1 healthy target in each AZ and timed recovery |
-| RPO ≤ 5 min | **Successful simulated trace; recovery objective requires a timed production test** | Timestamped write, controlled DB failure and post-recovery record audit |
-| RTO ≤ 60 min | **Successful simulated trace; recovery objective requires a timed production test** | Timed failover from fault to healthy end-to-end exam action |
-| Five-year retention | **Cost scenario evaluated** | Enforced lifecycle/retention policy and validation |
-| CloudWatch bottleneck fixed | **Causally established** | CloudWatch saturation evidence, safe change and repeated matched runs |
+| AZ-A outage | HTTP 200, 8/8 steps, 134 ms modeled trace | `evidence/failure-tests/02-az-a-outage-part2.png` |
+| AZ-B outage | HTTP 200, 9/9 steps, 134 ms modeled trace | `evidence/failure-tests/03-az-b-outage-part2.png` |
+| RDS primary failure | HTTP 200, 8/8 steps, 134 ms modeled trace | `evidence/failure-tests/04-rds-primary-result-part1.png` |
+| API EC2 AZ-A failure | HTTP 200, 9/9 steps, 134 ms modeled trace | `evidence/failure-tests/05-ec2-failover-part1.png` |
 
-## 7. Conclusion
+All four traces completed. **134 ms is the simulator request trace, not outage duration, failover RTO, or data-loss RPO.** See [failure test report](evidence/failure-tests/failure-scenarios.md) and [local recovery report](docs/recovery-analysis.md).
 
-The Assignment 3 investigation connects architecture, pricing, simulated fault injection, local database analysis and real AWS monitoring. Its strongest supported outcomes are a well-documented partial Singapore cost model, four successful modeled fault paths, reproducible k6 load evidence and a real CPU target-tracking configuration followed by a passing same-script retest. 
+## 6. Peak load and performance
 
-## 8. Evidence and reproducibility
+### 6.1 Local exam-start acceptance retest
 
-- [`docs/cost-report.md`](cost-report.md) — detailed cost assumptions, calculator exports and alternatives.
-- [`architecture/change-log.md`](../architecture/change-log.md) — change rationale and single points of failure.
-- [`infra/failure-scenarios.md`](../infra/failure-scenarios.md) — detailed four-scenario outcomes and fixes.
-- [`evidence/load-tests/load-test-report.md`](evidence/load-tests/load-test-report.md) — local k6/DB tests and simulator analysis.
-- [`evidence/cloudwatch/cloudwatch-analysis.md`](evidence/cloudwatch/cloudwatch-analysis.md) — CloudWatch metrics, optimization and retest.
-- [`docs/final-evidence-checklist.md`](final-evidence-checklist.md) — rubric-by-rubric evidence traceability.
+The local k6 test `tests/load/exam-start-3000-retest.js` scheduled 3,000 exam-start requests over approximately five minutes. Results: **3,000/3,000 HTTP 201**, **zero HTTP failures**, **p95 19.13 ms**, **mean 8.74 ms**. Database verification showed 3,000 persisted attempts in **299.85 s**. This satisfies the stated exam-start count in the tested **local** environment; it does not prove login, autosave, submission and marking at the same time in real AWS.
+
+![Local 3,000-exam-start retest](evidence/load-tests/local-exam-start/07-retest-peak-load-results.png)
+
+*Figure 2. Local k6 retest; database verification is `08-retest-database-verification.png`.*
+
+### 6.2 Real AWS CloudWatch and comparable retest
+
+The Mumbai ALB 0→5→10→0 VU, 120 s read-only `/health` test produced **531 requests**, **650.83 ms p95**, **one failure**. After configuring CPU target tracking, the **same script** produced **559 requests**, **434.51 ms p95**, **zero failures**. The observed p95 was **216.32 ms (33.24%) lower**, but **no scale-out occurred**. Therefore the difference **cannot be credited to added instances**, and the CloudWatch evidence does not isolate a confirmed CPU bottleneck. See [CloudWatch analysis](evidence/cloudwatch/cloudwatch-analysis.md).
+
+### 6.3 Additional reasoned load scenarios
+
+1. **Authenticated autosave write surge:** local 100-VU stress/burst tests observed high PostgreSQL WALWrite/WALSync waits. Turning off synchronous commit improved one experimental run but was **reverted** because it weakens acknowledged-answer durability. Production-safe next steps: bounded pools, idempotency, indexing and realistic AWS testing.
+2. **Simultaneous submission and marking surge:** SQS buffers work but can accumulate backlog; monitor queue depth, oldest-message age, DLQ and worker processing latency. A production-sized timed submission/marking benchmark remains outstanding.
+
+See [load-test report](evidence/load-tests/load-test-report.md).
+
+## 7. Recovery measurements and data integrity
+
+| Local experiment | Observed duration | What was checked |
+|---|---:|---|
+| Backend restart | 7.737 s | First healthy response after stop/restart |
+| Backend outage with real exam answer | 8.675 s | Saved answer recovered |
+| PostgreSQL restart with persistent volume | 7.345 s | Saved answer recovered |
+| Isolated `pg_restore` command | 0.642 s | Restore command succeeded; excludes full service recovery |
+| Archived WAL replay | 5.043 s | Archive recovery phase only |
+| WAL startup → writable readiness | 7.066 s | Both baseline and post-backup markers recovered |
+
+The standalone physical backup was roughly **6 min 19 s old** at the simulated failure point; backup-only recovery therefore **does not meet** a five-minute recovery-point bound in that experiment. WAL replay recovered a post-backup transaction, showing why archived logs improve the recoverable point. The local WAL archive shared the same host, so it was **not an independent disaster-recovery backup**. No AWS RDS failover time or end-to-end production recovery time was measured.
+
+![WAL recovery verification](evidence/recovery-tests/wal-pitr/02-wal-replay-results.png)
+
+*Figure 3. Both WAL test markers recovered. See [recovery analysis](docs/recovery-analysis.md) for timing, evidence and limitations.*
+
+## 8. Final feasibility verdict
+
+**Budget:** favorable in the partial calculator model, unverified for a complete HA deployment. **Peak exam starts:** passed locally, not proven in AWS. **AZ resilience:** four simulator scenarios passed, not a real AWS AZ-outage drill. **RPO/RTO:** local persistence and recovery mechanisms demonstrated, not guaranteed production objectives. **Five-year retention:** modeled lifecycle choices; production retention policy needs verification.
+
+**Recommendation:** adopt the revised architecture as a candidate design, but require a complete Singapore calculator bill, live two-AZ deployment and fault tests, realistic AWS peak workflow tests, backup/PITR verification on the target database, and validated S3 retention before production sign-off.
+
+## 9. Submission navigation
+
+- [Cost and service analysis](docs/cost-report.md)
+- [CloudWatch investigation](evidence/cloudwatch/cloudwatch-analysis.md)
+- [Load and bottleneck report](evidence/load-tests/load-test-report.md)
+- [Failure scenarios and fixes](infra/failure-scenarios.md)
+- [Local recovery and RPO/RTO analysis](docs/recovery-analysis.md)
+- [Architecture change log](architecture/change-log.md)
+- [Evidence and rubric checklist](docs/final-evidence-checklist.md)
 

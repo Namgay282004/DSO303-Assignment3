@@ -1,6 +1,6 @@
-# DSO303 Assignment 3 — Cost and Service Analysis
+# DSO303 Assignment 3 : Cost and Service Analysis
 
-**Scope:** Singapore `ap-southeast-1` calculator estimates for normal and exam months. These are partial planning estimates, not full live production invoices. For the integrated narrative, see [Final Technical Report](assignment3-final-report.md).
+**Scope:** Singapore `ap-southeast-1` calculator estimates for normal and exam months. These are partial planning estimates, not full live production invoices. For the integrated narrative, see [Final Technical Report](../README.md).
 
 ## 1. Workload, objectives and financial assumptions
 
@@ -98,4 +98,14 @@ Singapore's partial normal-month estimate exceeds Mumbai's by **$5.25/month**. T
 
 **Financially promising, conditional:** $92.36/month is below the $1,000/month target only for the partial calculator model. A production acceptance decision needs a complete Singapore two-AZ bill including standby EC2, ALB, RDS Multi-AZ, NAT/endpoints, KMS, logging, data egress, backups and five-year retention growth. Capacity for 3,000 starts/5 minutes, RPO and RTO are evaluated at the architecture level by a calculator.
 
-**Evidence originals:** `evidence/cost-calculator/*.csv` and screenshots. For resilience and performance implications see the [integrated report](assignment3-final-report.md).
+**Evidence originals:** `evidence/cost-calculator/*.csv` and screenshots. For resilience and performance implications see the [integrated report](../README.md).
+
+## 8. Final cost audit and cost-per-student method
+
+The original calculator values remain **partial planning estimates**. A precise service-by-service production bill, ranked top three *actual* line items, and full five-year retention accumulation **cannot be verified from the current partial modeled scope**. The largest *potential* cost drivers are Multi-AZ database, private networking/NAT and running compute, but this is a **risk ranking**, not a measured invoice ranking.
+
+**Budget headroom in the priced subset:** $1,000 − $92.36 = **$907.64/month**; do not treat this as confirmed production headroom. The **annual** target is $12,000; the partial modeled annual estimate is $1,108.32.
+
+**Cost per student formula:** `annual complete platform cost / number of distinct students served per year`. The brief gives peak concurrent starts but does not establish the number of unique annual students; using 3,000 as the annual denominator would be an assumption. If **3,000 unique students/year is explicitly assumed for illustration**, the *partial* annual model yields `$1,108.32 / 3,000 = $0.37 per student-year` (rounded). This is **not** a validated actual cost per student.
+
+**Implementation status:** Savings Plan, NAT/interface-endpoint and S3 lifecycle are calculator comparisons; they are not proof that all three changes were deployed in Singapore. The PrivateLink scenario does not replace general Internet NAT traffic, and the S3 storage class choice must respect retrieval time and five-year retention obligations. See the [final feasibility verdict](../README.md#8-final-feasibility-verdict).

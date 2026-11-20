@@ -240,3 +240,16 @@ The retest CloudWatch screenshot is included in `evidence/cloudwatch/`. The orig
 
 The screenshots support **simulated successful request routing at several configured load levels** and a **predicted database contention risk**. The later real-AWS CloudWatch investigation, CPU target-tracking configuration and matched-script retest are documented in [`cloudwatch-analysis.md`](../cloudwatch/cloudwatch-analysis.md). The local database experiment remains a separate isolated test and was not deployed to AWS.
 
+## Local 3,000-student exam-start acceptance retest — final evidence
+
+**Environment:** local backend and PostgreSQL, not AWS Mumbai or Singapore. **Script:** `tests/load/exam-start-3000-retest.js`. **Workload:** 3,000 exam-start operations scheduled over five minutes; 30 configured VUs. **Result:** 3,000/3,000 HTTP 201, 0 HTTP request failures, p95 **19.13 ms**, mean **8.74 ms**, and **3,000 persisted attempts within 299.85 s** on the database verification. The terminal also reports **3,001 k6 iterations** because one iteration did not generate an HTTP request; report the **3,000 HTTP requests** as the exam-start count.
+
+![Successful 3,000-start retest](local-exam-start/07-retest-peak-load-results.png)
+
+![Database verification of 3,000 starts](local-exam-start/08-retest-database-verification.png)
+
+Raw evidence: `local-exam-start/07-retest-summary.json`, `07-retest-terminal.log`, and the two screenshots above. The original local pilot and initial run are also retained.
+
+**Scope:** This demonstrates the requested start volume in the local test, not complete simultaneous authentication, autosave, submission, grading, and AWS two-AZ throughput. The other two reasoned peak scenarios remain authenticated autosave contention and simultaneous SQS-backed submission/marking; the former has separate 100-VU local measurements, while the latter needs a timed end-to-end queue-drain test.
+
+**CloudWatch/fix distinction:** A CPU target-tracking policy was configured in real AWS Mumbai, and the same read-only health script was rerun with lower observed p95 (650.83 → 434.51 ms). No scale-out occurred and the CloudWatch evidence did not establish CPU saturation; do **not** claim the policy caused the measured latency difference. See [`cloudwatch-analysis.md`](../cloudwatch/cloudwatch-analysis.md).

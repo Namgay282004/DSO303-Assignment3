@@ -153,3 +153,11 @@ The revised diagram is a **target design**, while the real AWS test environment 
 ## 9. Verified  scaling-policy revision
 
 **Before:** Initial Mumbai ASG inspection found one active API instance, min 0, max 2 and no confirmed dynamic scaling policy. **After:** A CPU target-tracking policy `dso303-a3-cpu-target-50` was created (50% CPU, 180 s warmup), with capacity min 1, desired 1, max 2. This addresses the *absence of an elastic scaling rule*, not the one-AZ active-capacity risk. A two-minute 10-VU retest returned 559 successful requests and p95 434.51 ms compared with the original 531 requests and p95 650.83 ms. No scale-out occurred, so latency improvement must not be attributed to scaling. Evidence: `evidence/cloudwatch/cloudwatch-analysis.md` and locally held retest artifacts pending inclusion.
+
+## 10. Final evidence reconciliation — 21 November 2026
+
+The local exam-start acceptance test **was completed after the earlier README draft**: `tests/load/exam-start-3000-retest.js` achieved 3,000/3,000 HTTP 201 starts in approximately five minutes, p95 19.13 ms, and 3,000 persisted database attempts. This is a **local** capacity demonstration and does not convert the Mumbai single-active-instance environment into a validated two-AZ AWS deployment.
+
+Recovery testing was also extended beyond simulator traces: backend restart, PostgreSQL restart, isolated `pg_dump`/`pg_restore`, and verified physical backup plus archived WAL replay. See `docs/recovery-analysis.md`. The proposed architecture should include **off-host/durable backup and archived WAL/PITR strategy**, a documented restoration runbook, and monitored recovery objectives. These are **design recommendations**, not claims of deployed AWS changes.
+
+**Outstanding single-point-of-failure acceptance:** Mumbai observed one active API instance; the target design needs healthy capacity in both AZs. The local WAL archive was on one host and is not independently disaster-resilient. Ensure SQS worker capacity, backup restore access and S3 retention policies are verified before production approval.

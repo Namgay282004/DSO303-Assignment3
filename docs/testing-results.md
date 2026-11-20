@@ -339,3 +339,9 @@ These screenshots demonstrate infrastructure and application setup. They are not
 ![CloudFront distribution](../evidence/aws-deployment/cloudfront-distribution.png)
 
 *Figure — Frontend distribution resource evidence.*
+
+## 12. Assignment 3 evidence update (21 November 2026)
+
+**Correction to Section 9:** The earlier statement that 3,000 exam starts were not load-tested is **outdated**. A later local k6 retest completed **3,000 successful HTTP 201 exam-start requests in approximately five minutes**, with zero failures, **19.13 ms p95**, and database verification of **3,000 persisted attempts**. See `evidence/load-tests/local-exam-start/07-retest-peak-load-results.png` and `08-retest-database-verification.png`.
+
+**Recovery update:** Local backend restart 7.737 s; authenticated answer recovery 8.675 s; PostgreSQL restart 7.345 s; isolated logical restore command 0.642 s; WAL startup-to-writable 7.066 s, with the post-backup marker recovered. See `docs/recovery-analysis.md`. These results do **not** establish production AWS RPO/RTO guarantees. The original Assignment 2 deployment evidence remains historical and separate from Assignment 3 acceptance tests.

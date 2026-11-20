@@ -1,18 +1,31 @@
-# Evidence index and assessment traceability
+# Assignment 3 : Final Evidence and Marking Checklist
 
-This index maps the five assessment areas to the actual source records and reports. It is a navigation aid, not a replacement for the main report.
+**Basis:** Official Assignment 3 brief (10 marks total); reviewed against committed repository ZIP on 21 November 2026. "Collected" means files exist, **not** that every production target was proven.
 
-| Assessment area | Report section | Principal evidence |
-|---|---|---|
-| Revised architecture and design rationale | [Final report §2](assignment3-final-report.md) | `architecture/screenshots/final-revised-architecture-a3.png`, `architecture/change-log.md` |
-| Services, feasibility and trade-offs | [Final report §3](assignment3-final-report.md) | `docs/cost-report.md`, `evidence/cost-calculator/` CSV exports and screenshots, Bhutan ping screenshots |
-| Cost estimates and three optimization scenarios | [Final report §3](assignment3-final-report.md) | Normal/exam-month exports, Savings Plan, NAT/PrivateLink and S3 lifecycle evidence |
-| Four failure simulations and recovery assessment | [Final report §4](assignment3-final-report.md) | `infra/failure-scenarios.md`, `evidence/failure-tests/` screenshots |
-| Performance, bottleneck investigation and retest | [Final report §5](assignment3-final-report.md) | `evidence/load-tests/`, `evidence/local-load-test/`, `evidence/cloudwatch/` and `cloudwatch-analysis.md` |
+| Rubric criterion | Marks | Evidence in original repository | Remaining qualification |
+|---|---:|---|---|
+| Revised architecture / single points of failure / change log | 2 | `architecture/screenshots/final-revised-architecture-a3.png`; `architecture/change-log.md`; simulator screenshots | Confirm target architecture and accepted SPOFs clearly distinguished from deployed Mumbai state |
+| Cost/service documentation, hidden costs, four comparisons, regional analysis | 2 | `docs/cost-report.md`; `docs/services.md`; `evidence/cost-calculator/*.csv`; Bhutan latency screenshots | Complete service-level two-AZ bill, hidden charges and student denominator not fully established |
+| Both profiles + ≥3 cost optimizations | 2 | Singapore normal/exam CSVs; Savings Plan, NAT/PrivateLink, S3 lifecycle exports | Different optimization scopes; do not add as guaranteed savings |
+| Four failure scenarios with RPO/RTO assessment and fixes | 2 | `evidence/failure-tests/*`; `infra/failure-scenarios.md`; `docs/recovery-analysis.md` | Four modeled routes passed; production scenario-specific RPO/RTO not measured |
+| CloudWatch bottleneck, fix/retest, two reasoned load scenarios | 2 | `evidence/cloudwatch/*`; `evidence/load-tests/*`; local autosave evidence | CPU bottleneck not proven; policy did not scale out; SQS surge lacks timed queue-drain run |
 
-## Submission evidence notes
+## Key screenshots and raw artifacts
 
-- The November 20 AWS retest measured 559 requests, 0% failures and 434.51 ms p95. Its original terminal output and JSON summary are on the student's laptop and can be added under `evidence/cloudwatch/`.
-- The CPU target-tracking policy was configured at 50% CPU; the activity history did not show a scale-out during the two-minute retest.
-- Simulator recovery traces and local database tests should be interpreted within their respective environments.
-- Check the main report in VS Code Markdown Preview to view all embedded figures.
+- **Local 3,000 starts:** `evidence/load-tests/local-exam-start/07-retest-peak-load-results.png`, `08-retest-database-verification.png`, `07-retest-summary.json`.
+- **Four modeled faults:** `evidence/failure-tests/02-az-a-outage-part2.png`, `03-az-b-outage-part2.png`, `04-rds-primary-result-part1.png`, `05-ec2-failover-part1.png`.
+- **Real AWS monitoring:** `evidence/cloudwatch/alb-bottleneck-metrics.png`, `autoscaling-policies.png`, `18-cpu-target-tracking-policy-form.png`, `optimization-retest-cloudwatch.png`, and `10-bottleneck-summary.json`.
+- **Local backend/DB:** `evidence/recovery-tests/local-backend/08-exam-answer-recovery-results.png`, `local-postgres/01-postgres-recovery-results.png`.
+- **Backup/WAL:** `evidence/recovery-tests/backup-restore/04-timed-restoration-results.png`, `wal-pitr/02-wal-replay-results.png`, `wal-pitr/04-recovery-timing-results.png`, `wal-pitr/04-recovery-timing-results.json`.
+- **Pricing:** `evidence/cost-calculator/normal-month-singapore.png`, `ezam-month.png`, `normal-month-mumbai.png`, three optimization screenshots and CSVs.
+
+## Final submission checks
+
+- [ ] Merge the Markdown files from the report ZIP into the original repository, keeping the same relative paths.
+- [ ] Verify GitHub renders all image links after merge.
+- [ ] Confirm cost calculator links, date checked, and any full-service cost breakdown available to the tutor.
+- [ ] Keep simulator, local Docker and real AWS results explicitly separate.
+- [ ] Do not state 134 ms as RTO or imply local WAL storage is off-host disaster recovery.
+- [ ] Confirm the tutor's permission to replace the official brief's demo-video requirement with detailed written evidence.
+- [ ] Verify no secrets, private backups or PostgreSQL data directories are committed.
+- [ ] Check final Git status and open Markdown pages in GitHub before submission.
