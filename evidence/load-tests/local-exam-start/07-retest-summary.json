@@ -1,0 +1,153 @@
+{
+    "metrics": {
+        "http_req_failed": {
+            "fails": 3000,
+            "passes": 0,
+            "thresholds": {
+                "rate<0.01": false
+            },
+            "value": 0
+        },
+        "http_req_duration": {
+            "p(90)": 11.6526922,
+            "p(95)": 19.128672449999968,
+            "avg": 8.743432159333342,
+            "min": 4.741625,
+            "med": 6.475898,
+            "max": 216.345201,
+            "thresholds": {
+                "p(95)<1000": false
+            }
+        },
+        "http_req_sending": {
+            "p(90)": 0.0370932,
+            "p(95)": 0.04451654999999995,
+            "avg": 0.10559768833333325,
+            "min": 0.014909,
+            "med": 0.021342,
+            "max": 139.062181
+        },
+        "http_req_waiting": {
+            "avg": 8.539468943333333,
+            "min": 4.668238,
+            "med": 6.3763535000000005,
+            "max": 158.92799,
+            "p(90)": 11.340640699999998,
+            "p(95)": 18.572177049999926
+        },
+        "http_req_duration{expected_response:true}": {
+            "p(90)": 11.6526922,
+            "p(95)": 19.128672449999968,
+            "avg": 8.743432159333342,
+            "min": 4.741625,
+            "med": 6.475898,
+            "max": 216.345201
+        },
+        "iterations": {
+            "count": 3001,
+            "rate": 10.000810347433719
+        },
+        "exam_start_status_201": {
+            "count": 3000,
+            "rate": 9.997477854815447
+        },
+        "checks": {
+            "fails": 0,
+            "passes": 3000,
+            "value": 1
+        },
+        "data_sent": {
+            "count": 1008000,
+            "rate": 3359.15255921799
+        },
+        "vus": {
+            "value": 0,
+            "min": 0,
+            "max": 1
+        },
+        "exam_start_duration": {
+            "avg": 8.743432159333342,
+            "min": 4.741625,
+            "med": 6.475898,
+            "max": 216.345201,
+            "p(90)": 11.6526922,
+            "p(95)": 19.128672449999968
+        },
+        "iteration_duration": {
+            "med": 6.746489,
+            "max": 350.214386,
+            "p(90)": 12.289963,
+            "p(95)": 20.088959,
+            "avg": 9.166990459513515,
+            "min": 0.064643
+        },
+        "http_req_tls_handshaking": {
+            "avg": 0,
+            "min": 0,
+            "med": 0,
+            "max": 0,
+            "p(90)": 0,
+            "p(95)": 0
+        },
+        "exam_start_success_rate": {
+            "passes": 3000,
+            "fails": 0,
+            "thresholds": {
+                "rate>0.99": false
+            },
+            "value": 1
+        },
+        "http_req_blocked": {
+            "p(90)": 0.0091822,
+            "p(95)": 0.011688149999999993,
+            "avg": 0.038294122666666645,
+            "min": 0.003293,
+            "med": 0.005398,
+            "max": 47.427406
+        },
+        "http_req_connecting": {
+            "min": 0,
+            "med": 0,
+            "max": 0.691633,
+            "p(90)": 0,
+            "p(95)": 0,
+            "avg": 0.0019982903333333334
+        },
+        "vus_max": {
+            "value": 30,
+            "min": 30,
+            "max": 30
+        },
+        "http_reqs": {
+            "count": 3000,
+            "rate": 9.997477854815447
+        },
+        "http_req_receiving": {
+            "p(90)": 0.095649,
+            "p(95)": 0.12075479999999993,
+            "avg": 0.09836552766666674,
+            "min": 0.045571,
+            "med": 0.0629905,
+            "max": 66.759604
+        },
+        "data_received": {
+            "rate": 3968.998708361732,
+            "count": 1191000
+        }
+    },
+    "root_group": {
+        "path": "",
+        "id": "d41d8cd98f00b204e9800998ecf8427e",
+        "groups": {},
+        "checks": {
+                "exam started with HTTP 201": {
+                    "id": "e63c6904f2a39911e4833b334860d59a",
+                    "passes": 3000,
+                    "fails": 0,
+                    "name": "exam started with HTTP 201",
+                    "path": "::exam started with HTTP 201"
+                }
+            },
+        "name": ""
+    }
+}

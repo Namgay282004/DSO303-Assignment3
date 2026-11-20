@@ -1,0 +1,15 @@
+{
+  "environment": "local Docker",
+  "scenario": "PostgreSQL container outage and restart",
+  "attempt_id": 9011,
+  "question_id": 1,
+  "failure_started_utc": "2026-11-20T19:03:34.122233+00:00",
+  "answer_restored_utc": "2026-11-20T19:03:41.467227+00:00",
+  "failure_confirmed": true,
+  "answer_recovered": true,
+  "observed_rto_seconds": 7.345,
+  "rto_target_seconds": 3600,
+  "rto_pass": true,
+  "committed_answer_loss_observed": false,
+  "rpo_assessment": "No loss of tested committed answer observed"
+}

@@ -1,0 +1,11 @@
+{
+  "test": "DSO303 Assignment 3 - Isolated WAL/PITR Recovery",
+  "archive_recovery_seconds": 5.043,
+  "startup_to_consistent_state_seconds": 2.684,
+  "startup_to_writable_ready_seconds": 7.066,
+  "recovered_markers": [
+    "A3-WAL-BASELINE-001",
+    "A3-WAL-POST-BACKUP-001"
+  ],
+  "limitations": "Measured PostgreSQL startup and WAL replay only; not full application RTO or guaranteed production RPO."
+}

@@ -52,3 +52,8 @@ terraform/*-review.txt
 terraform/deployment-review.txt
 terraform/final-review.txt
 terraform/multi-az-review.txt
+# Local load-test credentials
+evidence/load-tests/local-exam-start/private/
+evidence/recovery-tests/local-backend/private/
+evidence/recovery-tests/backup-restore/private/
+evidence/recovery-tests/wal-pitr/private/

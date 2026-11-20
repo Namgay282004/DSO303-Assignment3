@@ -1,0 +1,29 @@
+
+PostgreSQL Database directory appears to contain a database; Skipping initialization
+
+2026-11-20 19:48:42.452 UTC [1] LOG:  starting PostgreSQL 16.15 on x86_64-pc-linux-musl, compiled by gcc (Alpine 15.2.0) 15.2.0, 64-bit
+2026-11-20 19:48:42.493 UTC [1] LOG:  listening on Unix socket "/var/run/postgresql/.s.PGSQL.5432"
+2026-11-20 19:48:42.556 UTC [16] LOG:  database system was interrupted; last known up at 2026-11-20 19:31:04 UTC
+cp: can't stat '/wal_archive/00000002.history': No such file or directory
+2026-11-20 19:48:42.928 UTC [16] LOG:  starting archive recovery
+2026-11-20 19:48:42.929 UTC [16] LOG:  starting backup recovery with redo LSN 0/3000028, checkpoint LSN 0/3000098, on timeline ID 1
+2026-11-20 19:48:42.952 UTC [16] LOG:  restored log file "000000010000000000000003" from archive
+2026-11-20 19:48:43.283 UTC [16] LOG:  redo starts at 0/3000028
+2026-11-20 19:48:43.304 UTC [16] LOG:  restored log file "000000010000000000000004" from archive
+2026-11-20 19:48:43.704 UTC [16] LOG:  restored log file "000000010000000000000005" from archive
+cp: can't stat '/wal_archive/000000010000000000000006': No such file or directory
+2026-11-20 19:48:45.136 UTC [16] LOG:  completed backup recovery with redo LSN 0/3000028 and end LSN 0/3000138
+2026-11-20 19:48:45.136 UTC [16] LOG:  consistent recovery state reached at 0/3000138
+2026-11-20 19:48:45.136 UTC [1] LOG:  database system is ready to accept read-only connections
+cp: can't stat '/wal_archive/000000010000000000000006': No such file or directory
+2026-11-20 19:48:45.144 UTC [16] LOG:  redo done at 0/5000110 system usage: CPU: user: 0.00 s, system: 0.01 s, elapsed: 1.86 s
+2026-11-20 19:48:45.144 UTC [16] LOG:  last completed transaction was at log time 2026-11-20 19:33:32.544648+00
+2026-11-20 19:48:45.160 UTC [16] LOG:  restored log file "000000010000000000000005" from archive
+cp: can't stat '/wal_archive/00000002.history': No such file or directory
+2026-11-20 19:48:47.342 UTC [16] LOG:  selected new timeline ID: 2
+cp: can't stat '/wal_archive/00000001.history': No such file or directory
+2026-11-20 19:48:47.971 UTC [16] LOG:  archive recovery complete
+2026-11-20 19:48:47.981 UTC [14] LOG:  checkpoint starting: end-of-recovery immediate wait
+2026-11-20 19:48:48.499 UTC [14] LOG:  checkpoint complete: wrote 9 buffers (0.1%); 0 WAL file(s) added, 0 removed, 3 recycled; write=0.034 s, sync=0.021 s, total=0.528 s; sync files=8, longest=0.010 s, average=0.003 s; distance=49152 kB, estimate=49152 kB; lsn=0/6000028, redo lsn=0/6000028
+2026-11-20 19:48:49.518 UTC [1] LOG:  database system is ready to accept connections
+2026-11-20 19:49:05.834 UTC [35] FATAL:  role "postgres" does not exist

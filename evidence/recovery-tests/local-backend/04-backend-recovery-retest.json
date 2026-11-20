@@ -1,0 +1,11 @@
+{
+  "environment": "local Docker",
+  "scenario": "backend stop and restart",
+  "failure_started_utc": "2026-11-20T18:42:30.098465+00:00",
+  "first_healthy_response_utc": "2026-11-20T18:42:37.835416+00:00",
+  "failure_confirmed": true,
+  "recovery_confirmed": true,
+  "observed_rto_seconds": 7.737,
+  "rto_target_seconds": 3600,
+  "rto_pass": true
+}
