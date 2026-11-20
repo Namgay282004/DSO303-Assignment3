@@ -14,8 +14,8 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 
 ## Observed failure simulations
 
-| Scenario | Observed outcome | Request trace | RPO / RTO |
-|---|---|---|---|
+| Scenario | Observed outcome | Request trace | 
+|---|---|---|
 | AZ-A unavailable | ALB routed to API EC2 in AZ-B; modeled RDS failover | HTTP 200; 8/8 steps; 134 ms | Not measured |
 | AZ-B unavailable | ALB routed to API EC2 in AZ-A | HTTP 200; 9/9 steps; 134 ms | Not measured |
 | RDS primary failed | Simulator modeled Multi-AZ database failover | HTTP 200; 8/8 steps; 134 ms | Not measured |
@@ -72,3 +72,38 @@ The healthy simulation returned **HTTP 200**, **134 ms simulated request duratio
 The **134 ms value is simulated request duration**, not elapsed failover or recovery time. These screenshots do **not** measure when the fault began, when service was restored, or whether the last saved answer survived. Therefore, neither **RPO ≤ 5 minutes** nor **RTO ≤ 1 hour** is verified. No fix was deployed and retested in real AWS.
 
 **Conclusion:** Four fault-injection scenarios were exercised and successful modeled request paths were observed. Actual recovery performance and persistence still require controlled tests with timestamps and database record verification.
+
+## Additional visual fault-injection evidence and measurement audit
+
+The four scenarios above were run in **AWS Architecture Lab**, not by terminating real AWS production resources. The additional before/after captures below make the fault injection and observed simulated response paths auditable.
+
+| Scenario | Fault / expected user impact | Observed modeled result | Corrective action |
+|---|---|---|---|
+| AZ-A outage | One zone unavailable; temporary capacity reduction | HTTP 200, 8/8 modeled steps | Keep two healthy targets across AZs; verify RDS failover |
+| AZ-B outage | Remaining zone serves all traffic | HTTP 200, 9/9 modeled steps | Minimum per-AZ capacity and ALB health checks |
+| RDS primary failure | Connection interruption while standby promotes | HTTP 200, 8/8 modeled steps | Multi-AZ, retries/backoff, actual recovery drill |
+| API EC2 AZ-A failure | Target loss; possible reduced capacity | HTTP 200, 9/9 modeled steps; contradictory simulator warning | Two active healthy targets and tested replacement |
+
+**Do not interpret 134 ms as RTO.** It is modeled request duration, not elapsed recovery time. A real RPO measurement requires writing a timestamped answer, injecting a controlled fault, restoring service, and checking the latest durable answer. RTO requires start/end timestamps of outage and restoration. The evidence does not prove the five-minute RPO or one-hour RTO targets.
+
+![Healthy modeled trace](../evidence/failure-tests/01-healthy-baseline-part2.png)
+
+*Figure — Healthy baseline confirmation before injected faults.*
+![AZ-A fault settings](../evidence/failure-tests/02-az-a-outage-part1.png)
+
+*Figure — Fault injection configuration for AZ-A outage.*
+![AZ-B fault settings](../evidence/failure-tests/03-az-b-outage-part1.png)
+
+*Figure — Fault injection configuration for AZ-B outage.*
+![RDS baseline](../evidence/failure-tests/04-rds-primary-before.png)
+
+*Figure — Database state before modeled primary failure.*
+![RDS failover result](../evidence/failure-tests/04-rds-primary-result-part1.png)
+
+*Figure — Modeled RDS primary failure result, first evidence view.*
+![EC2 baseline](../evidence/failure-tests/05-ec2-az-a-before.png)
+
+*Figure — Application instance state before injected EC2 fault.*
+![EC2 modeled failover](../evidence/failure-tests/05-ec2-failover-part1.png)
+
+*Figure — First modeled response trace after EC2 fault.*

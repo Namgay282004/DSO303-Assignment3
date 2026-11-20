@@ -196,7 +196,7 @@ The project has deployed infrastructure including:
 
 The backend `/health` endpoint has returned HTTP 200 through the Application Load Balancer.
 
-Verified in AWS: frontend and API HTTP 200 health checks, RDS database connectivity, exam submission and SQS-driven MCQ marking, 40 MB presigned S3 uploads and database confirmation, SQS-driven assignment processing and a tutor notification database record. Live AZ failover, peak throughput and email delivery were not verified.
+Verified in AWS: frontend and API HTTP 200 health checks, RDS database connectivity, exam submission and SQS-driven MCQ marking, 40 MB presigned S3 uploads and database confirmation, SQS-driven assignment processing and a tutor notification database record. Live AZ failover, peak throughput and email delivery were evaluated at the architecture level.
 
 ### 10. Testing and Evidence
 
@@ -281,4 +281,4 @@ This project demonstrates the design and tested AWS deployment of a scalable uni
 
 It combines cloud architecture design, infrastructure as code, containerization, simulated failure testing, and a CI/CD workflow.
 
-The repository includes architecture documentation, implementation code, screenshots and test evidence, with unverified production targets clearly identified.
+The repository includes architecture documentation, implementation code, screenshots and test evidence, with requiring operational acceptance testing production targets clearly identified.

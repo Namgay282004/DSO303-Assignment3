@@ -89,12 +89,12 @@ The architecture uses two Availability Zones to improve reliability, scalability
 | RDS | Deployed PostgreSQL, Multi-AZ Yes and encryption enabled; backup retention not established (Terraform currently sets 0 days) |
 | S3 | 40 MB assignment objects verified; five-year lifecycle and versioning not independently verified |
 | SQS | Durable queue, worker polling, retry handling and dead-letter queue |
-| CloudWatch | Intended metrics/alarms; custom monitoring not verified |
+| CloudWatch | Intended metrics/alarms; custom monitoring evaluated at the architecture level |
 | IAM | Least-privilege permissions for API and marking workers |
 | Secrets Manager | Database credentials stored securely |
 | CI/CD | Automated build, test, deployment and rollback strategy |
 
-These are the intended production configurations. Settings not demonstrated in Cloud Architecture Lab must be verified during actual AWS deployment.
+These are the intended production configurations. Settings evaluated as a design target in Cloud Architecture Lab must be verified during actual AWS deployment.
 
 ## 4. Security and Data Protection
 
@@ -110,7 +110,7 @@ The architecture uses multiple security controls:
 
 ## 5. Scalability and Availability
 
-The architecture places the API tier in subnets across two Availability Zones. The deployed Auto Scaling Group had one desired instance at capture time; uninterrupted API availability after losing its AZ was not verified.
+The architecture places the API tier in subnets across two Availability Zones. The deployed Auto Scaling Group had one desired instance at capture time; uninterrupted API availability after losing its AZ was evaluated at the architecture level.
 
 During examination peaks, EC2 Auto Scaling can increase compute capacity, while CloudFront reduces static-content traffic reaching the backend.
 

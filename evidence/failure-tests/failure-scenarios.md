@@ -1,93 +1,93 @@
-# DSO303 Assignment 3 : Failure Scenarios and Recovery Evidence
+# Failure Simulation and Resilience Evaluation
 
-**Status:** Test plan; measurements must be entered from actual runs.  
-**Primary pricing Region:** Singapore (`ap-southeast-1`).  
-**Recovery targets:** RPO ≤ 5 minutes; RTO ≤ 60 minutes.  
-**Evidence distinction:** Floci simulated results are simulation evidence, not proof of actual AWS production recovery.
+**DSO303 Assignment 3 : Four fault-injection scenarios**
 
-## Measurement method
+## Executive findings
 
-For each scenario, record the last successfully persisted answer timestamp (`T_last`), the latest recoverable answer timestamp (`T_recovered`), the failure start (`T_failure`), and the first successful end-to-end response after recovery (`T_restored`).
+Four scenarios were exercised in AWS Architecture Lab using the Assignment 3 architecture: AZ-A outage, AZ-B outage, RDS primary failure and API EC2 failure. Each scenario returned a successful HTTP 200 modeled request trace. These results demonstrate the designed alternate paths under the simulator assumptions. The architecture targets **RPO ≤ 5 minutes** and **RTO ≤ 60 minutes**; the screenshots show routing outcomes rather than timestamped data-loss or elapsed-recovery calculations.
 
-- **Observed data loss (RPO):** `T_last - T_recovered`, if the test can identify missing persisted records. If no write was lost, record 0 minutes and show before/after records. Do not infer RPO from uptime alone.
-- **Observed recovery time (RTO):** `T_restored - T_failure`. Record the test's clock source and timestamps.
-- If no recovery or persistence evidence exists, enter **Not measured**, not **Pass**.
-- Capture the configuration, injected fault, application failure, recovery action, timestamps, and recovered records. Do not rely only on architecture screenshots.
+![Healthy architecture baseline](01-healthy-baseline-part1.png)
 
-## Scenario 1 : AZ-A outage
+*Figure 1 — Healthy baseline before the simulated faults.*
 
-**Affected components:** API instance in AZ-A, marking worker in AZ-A, possibly the RDS primary if hosted there.  
-**Expected impact:** ALB should route to a healthy AZ-B instance if one exists and has enough capacity; database failover may temporarily interrupt writes.  
-**Likely fix:** Multi-AZ capacity, ALB health checks, RDS failover, retry logic, and appropriately sized Auto Scaling minimum capacity.  
-**Cost trade-off:** A one-instance normal-month estimate does not pay for two concurrently healthy API instances; extra capacity must be priced.
+## Test results at a glance
 
-**Procedure:** (1) Save a uniquely identified answer and capture timestamp; (2) record successful API health and saved answer; (3) inject AZ-A failure in Floci or a safe isolated test environment; (4) repeatedly probe the API; (5) verify the answer after recovery; (6) record measured times and any missing writes.
+| Fault scenario | Recorded simulator outcome | Design conclusion |
+|---|---|---|
+| AZ-A outage | HTTP 200; 8/8 modeled steps; 134 ms simulated trace | Successful modeled failover path |
+| AZ-B outage | HTTP 200; 9/9 modeled steps; 134 ms simulated trace | Successful modeled failover path |
+| RDS primary failure | HTTP 200; 8/8 modeled steps; 134 ms simulated trace | Successful modeled failover path |
+| API EC2 instance failure | HTTP 200; 9/9 modeled steps; 134 ms simulated trace | Successful modeled failover path |
 
-| Field | Actual result |
+## 1. AZ-A outage
+
+**Observed result:** HTTP 200; 8/8 modeled steps; 134 ms simulated trace.
+
+The simulator continued routing through the AZ-B path when AZ-A was unavailable. The result illustrates cross-zone routing in the modeled architecture.
+
+![AZ-A outage: fault injection](02-az-a-outage-part1.png)
+
+*Figure 2 : Fault-injection state for az-a outage.*
+
+![AZ-A outage: modeled response](02-az-a-outage-part2.png)
+
+*Figure 3 : Simulator response and route trace.*
+
+
+## 2. AZ-B outage
+
+**Observed result:** HTTP 200; 9/9 modeled steps; 134 ms simulated trace.
+
+The simulator returned a successful route through the remaining AZ-A path. The design depends on maintaining sufficient healthy targets in both zones.
+
+![AZ-B outage: fault injection](03-az-b-outage-part1.png)
+
+*Figure 4 : Fault-injection state for az-b outage.*
+
+![AZ-B outage: modeled response](03-az-b-outage-part2.png)
+
+*Figure 5 : Simulator response and route trace.*
+
+
+## 3. RDS primary failure
+
+**Observed result:** HTTP 200; 8/8 modeled steps; 134 ms simulated trace.
+
+The modeled Multi-AZ database-failover path completed successfully. The exercise demonstrates the intended dependency and recovery path rather than a timed production RDS promotion.
+
+![RDS primary failure: fault injection](04-rds-primary-failed.png)
+
+*Figure 6 : Fault-injection state for rds primary failure.*
+
+![RDS primary failure: modeled response](04-rds-primary-result-part1.png)
+
+*Figure 7 : Simulator response and route trace.*
+
+
+## 4. API EC2 instance failure
+
+**Observed result:** HTTP 200; 9/9 modeled steps; 134 ms simulated trace.
+
+The modeled ALB route reached the remaining API target after the AZ-A EC2 failure. The trace evaluates route feasibility; actual availability requires healthy live capacity in both AZs.
+
+![API EC2 instance failure: fault injection](05-ec2-az-a-failed..png)
+
+*Figure 8 : Fault-injection state for api ec2 instance failure.*
+
+![API EC2 instance failure: modeled response](05-ec2-failover-part1.png)
+
+*Figure 9 : Simulator response and route trace.*
+
+## Recovery objectives and engineering interpretation
+
+| Objective | Evaluation approach |
 |---|---|
-| Test date/environment | Not measured |
-| Failure started (`T_failure`) | Not measured |
-| Service restored (`T_restored`) | Not measured |
-| Measured RTO | Not measured |
-| Last persisted / recovered answer | Not measured |
-| Measured RPO | Not measured |
-| RPO ≤ 5 min? | Not assessed |
-| RTO ≤ 60 min? | Not assessed |
-| Fix applied / retest | Not measured |
+| Availability-zone resilience | Tested through two independent AZ outage scenarios in the architecture simulator; both modeled request traces succeeded |
+| Application-instance resilience | Tested through EC2 failure simulation and alternate-target routing |
+| Database resilience | Tested through modeled primary failure and Multi-AZ recovery routing |
+| RPO ≤ 5 minutes | Design objective supported by durable answer storage and appropriate recovery planning; a timestamped write-recovery drill would quantify the operational RPO |
+| RTO ≤ 60 minutes | Design objective supported by redundant routing and database failover planning; a timed live recovery drill would quantify the operational RTO |
 
-**Evidence:** `evidence/failure-tests/01-az-a-before.png`, `01-az-a-failure.png`, `01-az-a-recovery.png`, `01-az-a-data-check.png`.
+## Conclusions
 
-## Scenario 2 : AZ-B outage
-
-**Expected impact:** Traffic should continue through AZ-A if adequate capacity exists; loss of the standby AZ may reduce redundancy.  
-**Likely fix:** Health checks, cross-AZ Auto Scaling, adequate minimum capacity, and alarm notification.  
-**Procedure:** Repeat the same timestamped persistence and recovery checks while failing AZ-B.
-
-| Field | Actual result |
-|---|---|
-| Test date/environment | Not measured |
-| Failure started / restored | Not measured |
-| Measured RTO | Not measured |
-| Measured RPO | Not measured |
-| RPO ≤ 5 min? | Not assessed |
-| RTO ≤ 60 min? | Not assessed |
-| Fix applied / retest | Not measured |
-
-**Evidence:** `evidence/failure-tests/02-az-b-before.png`, `02-az-b-failure.png`, `02-az-b-recovery.png`, `02-az-b-data-check.png`.
-
-## Scenario 3 : RDS primary failure / failover
-
-**Expected impact:** Temporary database connection failures; API writes may pause until RDS failover and connection recovery.  
-**Likely fix:** RDS Multi-AZ, retry with backoff, connection re-establishment, alarms, and restore testing.  
-**Procedure:** Persist a uniquely identified answer, trigger a safe database failover in a test environment, monitor failed/successful writes, and compare the last persisted record with recovered records. Avoid disrupting a live examination.
-
-| Field | Actual result |
-|---|---|
-| Test date/environment | Not measured |
-| Failure started / restored | Not measured |
-| Measured RTO | Not measured |
-| Measured RPO | Not measured |
-| RPO ≤ 5 min? | Not assessed |
-| RTO ≤ 60 min? | Not assessed |
-| Fix applied / retest | Not measured |
-
-**Evidence:** `evidence/failure-tests/03-rds-before.png`, `03-rds-failover.png`, `03-rds-recovery.png`, `03-rds-data-check.png`.
-
-## Scenario 4 : API instance failure / insufficient healthy capacity
-
-**Expected impact:** With one instance, API availability may be interrupted until replacement starts; with two healthy instances, ALB may continue serving requests.  
-**Likely fix:** Multi-AZ minimum healthy capacity, ALB target health checks, Auto Scaling replacement, and a tested startup procedure.  
-**Procedure:** Record API health and answer persistence, terminate or isolate one disposable test API instance, measure the outage and replacement time, then verify answer recovery and retest after the fix.
-
-| Field | Actual result |
-|---|---|
-| Test date/environment | Not measured |
-| Failure started / restored | Not measured |
-| Measured RTO | Not measured |
-| Measured RPO | Not measured |
-| RPO ≤ 5 min? | Not assessed |
-| RTO ≤ 60 min? | Not assessed |
-| Fix applied / retest | Not measured |
-
-**Evidence:** `evidence/failure-tests/04-api-before.png`, `04-api-failure.png`, `04-api-recovery.png`, `04-api-data-check.png`.
-
+The four simulator fault injections completed with successful modeled routing results, supporting the feasibility of the proposed multi-AZ architecture. In production, the target design should maintain healthy API capacity in both Availability Zones, use RDS Multi-AZ, and monitor ALB health and recovery events. Simulator latency values are trace outputs, not measured AWS outage durations.

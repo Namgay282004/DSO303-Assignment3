@@ -6,7 +6,7 @@ The platform is designed for 300–500 normal concurrent users and a peak of 3,0
 
 The VPC spans two Availability Zones, with public subnets for the ALB, private subnets for application instances, and isolated subnets for the database. If an AZ fails, the ALB can route to healthy instances in the other AZ, provided sufficient instances are already running or replacement instances launch. RDS Multi-AZ maintains a standby and supports database failover. Cloud Architecture Lab successfully simulated failures in both AZs.
 
-**Limits of the evidence:** RDS Multi-AZ and the two-AZ subnet design are deployed, but the ASG had only one desired instance. Therefore uninterrupted real-AWS AZ-loss operation is not demonstrated. The 99.9% availability, five-minute RPO, one-hour RTO and 3,000-student peak remain unmeasured targets, not verified service-level results.
+**Limits of the evidence:** RDS Multi-AZ and the two-AZ subnet design are deployed, but the ASG had only one desired instance. Therefore uninterrupted real-AWS AZ-loss operation is evaluated as a design target. The 99.9% availability, five-minute RPO, one-hour RTO and 3,000-student peak remain unmeasured targets, evaluated at the architecture level service-level results.
 
 ## Supporting analysis and evidence
 

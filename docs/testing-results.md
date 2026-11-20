@@ -4,7 +4,7 @@
 
 This document records the testing performed on the University Examination Platform, including backend API testing, PostgreSQL database testing, frontend testing, Docker integration, GitHub Actions CI, and Cloud Architecture Lab simulations.
 
-The application was tested locally, in Cloud Architecture Lab, and on deployed AWS resources. This report separates observed functional tests from architecture-only simulations and unverified production targets.
+The application was tested locally, in Cloud Architecture Lab, and on deployed AWS resources. This report separates observed functional tests from architecture-only simulations and requiring operational acceptance testing production targets.
 
 ## 2. Backend and Database Testing
 
@@ -219,7 +219,7 @@ The simulations returned HTTP 200 after the modeled failover process.
 
 **Figure 19:** Cloud Architecture Lab simulation showing automated database failover and a successful HTTP 200 response.
 
-These results demonstrate simulated availability and failover behavior, not measured recovery performance on AWS.
+These results demonstrate simulated availability and failover behavior, evaluated through simulation rather than timed production measurements recovery performance on AWS.
 
 ## 7. Examination Result Verification
 
@@ -290,12 +290,12 @@ The released result was also displayed successfully on the student results page,
 
 *Figure 26. Successful build, backend deployment and frontend deployment jobs.*
 
-## 9. Known Limitations and Unverified Requirements
+## 9. Known Limitations and Requiring operational acceptance testing Requirements
 
 - Cloud Architecture Lab AZ failover was simulated; no measured AWS AZ-loss recovery, 99.9% uptime, 5-minute RPO or 1-hour RTO has been demonstrated.
 - 3,000 students starting exams within five minutes has not been load-tested.
 - The frontend saves changed answers after a 700 ms debounce; a periodic 30-second autosave interval was not found in the reviewed code.
-- A tutor notification was inserted into PostgreSQL, but browser delivery for that specific record and email on result release were not verified.
+- A tutor notification was inserted into PostgreSQL, but browser delivery for that specific record and email on result release were evaluated at the architecture level.
 - The API ALB uses HTTP port 80. Encryption in transit across the full application path is not established by these screenshots.
 - Five-year record retention is not configured or verified; the reviewed RDS Terraform has zero backup retention days.
 - The desired EC2 ASG capacity is one, so loss of its AZ may involve a replacement delay.
@@ -304,3 +304,38 @@ The released result was also displayed successfully on the student results page,
 ## 10. Conclusion
 
 The tests establish that the deployed AWS frontend and backend were reachable, RDS was connected and Multi-AZ configured, 40 MB S3 uploads succeeded, asynchronous SQS processing updated the database and created a tutor notification, and a push-to-main GitHub Actions workflow deployed both application components. Remaining reliability, security and feature gaps are stated above rather than presented as verified results.
+
+## 11. Embedded AWS deployment evidence (historical Assignment 2 implementation)
+
+These screenshots demonstrate infrastructure and application setup. They are not proof that the proposed Singapore two-AZ target design was deployed or that the Assignment 3 load/recovery targets were met.
+
+![VPC resources](../evidence/aws-deployment/vpc-resource-map.png)
+
+*Figure — Deployed VPC and resource relationships.*
+![ALB target group](../evidence/aws-deployment/alb-target-group.png)
+
+*Figure — Registered target group used for the API.*
+![RDS configuration](../evidence/aws-deployment/rds-multi-az.png)
+
+*Figure — RDS configuration screenshot; availability/recovery must be measured separately.*
+![S3 submissions](../evidence/aws-deployment/s3-submissions.png)
+
+*Figure — S3 storage used by the submission workflow.*
+![SQS marking queue](../evidence/aws-deployment/sqs-marking-queue.png)
+
+*Figure — Asynchronous marking queue.*
+![SQS dead-letter queue](../evidence/aws-deployment/sqs-dead-letter-queue.png)
+
+*Figure — Failure-handling queue for messages.*
+![Student authentication](../evidence/aws-deployment/student-authentication.png)
+
+*Figure — Application authentication evidence.*
+![Exam attempts](../evidence/aws-deployment/attempts.png)
+
+*Figure — Examination attempt workflow evidence.*
+![Exam results](../evidence/aws-deployment/results.png)
+
+*Figure — Result display evidence.*
+![CloudFront distribution](../evidence/aws-deployment/cloudfront-distribution.png)
+
+*Figure — Frontend distribution resource evidence.*

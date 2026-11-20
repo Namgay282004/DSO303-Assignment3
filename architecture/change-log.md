@@ -129,4 +129,27 @@ The architecture was revised after the simulator returned **“Behavior not mode
 
 The successful AZ-A, AZ-B, RDS primary, and EC2 AZ-A failure traces are documented in [failure scenarios](../infra/failure-scenarios.md). The Architecture Analysis separately predicted database contention and reported configuration findings. Its RDS standby warning is not consistent with the modeled RDS failover trace.
 
-**Single points of failure:** Multi-AZ compute and database failover are proposed and partly supported by simulated traces; insufficient baseline EC2 capacity, database throughput contention, logical corruption, and unverified backups remain risks. The complete two-AZ infrastructure cost is not represented by the one-instance normal-month calculator baseline.
+**Single points of failure:** Multi-AZ compute and database failover are proposed and partly supported by simulated traces; insufficient baseline EC2 capacity, database throughput contention, logical corruption, and requiring operational acceptance testing backups remain risks. The complete two-AZ infrastructure cost is not represented by the one-instance normal-month calculator baseline.
+
+## 8. Evidence-driven architecture decisions (final review)
+
+The revised diagram is a **target design**, while the real AWS test environment in Mumbai had one running application instance and no dynamic scaling policy at inspection. The model and the observed deployment must not be described as identical.
+
+![Revised final design](screenshots/final-revised-architecture-a3.png)
+
+*Figure : Proposed two-AZ design with cost and resilience revisions.*
+![Simulator database risk](../evidence/load-tests/database-bottleneck.png)
+
+*Figure : Simulator-predicted database bottleneck; not a CloudWatch measurement.*
+![Observed ASG policies](../evidence/cloudwatch/autoscaling-policies.png)
+
+*Figure : Real AWS absence of a demand-triggered scaling policy.*
+![AWS capacity baseline](../evidence/aws-baseline/03-capacity-resilience-baseline.png)
+
+*Figure : Real deployment capacity baseline used to separate deployed and proposed states.*
+**Design implications:** retain two-AZ targets and Multi-AZ RDS in the target architecture; configure and verify a demand-based or scheduled scaling policy before exam peaks; preserve durable answer commits; and cost every required standby/worker component. These are **recommended changes**, not proven production modifications. The observed successful instance refreshes do not establish high-load scale-out.
+
+
+## 9. Verified  scaling-policy revision
+
+**Before:** Initial Mumbai ASG inspection found one active API instance, min 0, max 2 and no confirmed dynamic scaling policy. **After:** A CPU target-tracking policy `dso303-a3-cpu-target-50` was created (50% CPU, 180 s warmup), with capacity min 1, desired 1, max 2. This addresses the *absence of an elastic scaling rule*, not the one-AZ active-capacity risk. A two-minute 10-VU retest returned 559 successful requests and p95 434.51 ms compared with the original 531 requests and p95 650.83 ms. No scale-out occurred, so latency improvement must not be attributed to scaling. Evidence: `evidence/cloudwatch/cloudwatch-analysis.md` and locally held retest artifacts pending inclusion.

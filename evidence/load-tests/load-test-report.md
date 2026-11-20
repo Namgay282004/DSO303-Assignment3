@@ -1,4 +1,4 @@
-# Assignment 3 : Load Simulation, Bottleneck Analysis, and Proposed Fix
+# Assignment 3 : Load Simulation, Bottleneck Investigation, Optimization and Retest
 
 ## Workload objective
 
@@ -42,7 +42,7 @@ Consider application-side PostgreSQL connection pooling, query/index optimizatio
 
 **Production-safe fix applied:** None.  
 **Measured experimental improvement:** Yes, in the isolated local database; rejected for production durability.  
-**CloudWatch load-test evidence:** Not collected.  
+**CloudWatch load-test evidence:** Collected in real AWS Mumbai; see `../cloudwatch/cloudwatch-analysis.md`. This local-only section describes a separate database experiment.  
 **Peak-load requirement verified:** No.
 
 ## Architecture analysis and configuration risks
@@ -65,7 +65,7 @@ The simulator reported Availability **100%**, Resilience **45%**, Fault Toleranc
 Thousands of students may save answers together. **Expected risk:** elevated RDS connections, write latency, or failed saves. **Proposed mitigation:** bounded connection pools, indexed writes, safe retry/idempotency, and durable acknowledgements. Test autosave against the five-minute RPO objective. **Partially investigated through local k6 testing (up to 100 VUs), not at the required 3,000-student scale.**
 
 ### Submission and marking surge
-Simultaneous submissions may increase SQS queue depth and marking delay. **Expected risk:** worker backlog and delayed result processing. **Proposed mitigation:** SQS buffering, worker scaling, DLQ, retries, and idempotent processing. **Not measured.**
+Simultaneous submissions may increase SQS queue depth and marking delay. **Expected risk:** worker backlog and delayed result processing. **Proposed mitigation:** SQS buffering, worker scaling, DLQ, retries, and idempotent processing. **Simulated outcome (no timed recovery measurement).**
 
 
 ## Local k6 Load Testing and PostgreSQL Bottleneck Investigation
@@ -204,8 +204,39 @@ The experimental configuration improved measured performance but
 was rejected for durability reasons. A production-safe optimization
 has not yet been implemented and retested.
 
+## Real AWS CloudWatch Validation 
+
+The following real AWS tests complement, but must not be conflated with, the earlier local PostgreSQL tests and Architecture Lab simulations. See the dedicated [CloudWatch analysis](../cloudwatch/cloudwatch-analysis.md) for the full methodology and raw evidence index.
+
+| Test | Requests | Rate | p95 | HTTP failures |
+|---|---:|---:|---:|---:|
+| Health baseline, 1 VU | 54 | 0.89/s | 364.74 ms | 0% |
+| Health controlled, 5 VUs | 541 | 4.47/s | 370.73 ms | 0% |
+| Health ramp, up to 10 VUs | 531 | 4.42/s | 650.83 ms | 0.18% |
+| Read-only exam retrieval, 5 VUs | 266 | 4.34/s | 400.35 ms | 0% |
+
+The ramped test had a different VU schedule and throughput, so its increased p95 is not definitive proof of saturation. EC2 CPU was approximately 0.4–0.5%, with CPU credits near 289; CloudWatch did not demonstrate CPU exhaustion. ALB target response time was low in the sampled period compared with client-observed latency.
+
+![ALB under higher load](../cloudwatch/alb-bottleneck-metrics.png)
+
+*Figure : Real AWS ALB metrics for the 10-VU investigation.*
+![EC2 utilization](../cloudwatch/ec2-cpu-during-test.png)
+
+*Figure : Low CPU and stable credit balance during testing.*
+![Exam retrieval metrics](../cloudwatch/aws-exam-read-cloudwatch.png)
+
+*Figure : CloudWatch metrics for the read-only exam retrieval workload.*
+**Rubric limitation:** These AWS tests did not prove a backend bottleneck or a production-safe fix followed by an identical retest. The separate local asynchronous-commit experiment was deliberately rejected for exam-answer durability. Do not describe it as a deployed AWS optimization.
+
+
+## AWS Auto Scaling optimization and retest — 20 November 2026
+
+A 50% CPU target-tracking policy was added to the existing Mumbai ASG, with 180 s warmup and 1–2 instance capacity bounds. The same 120-second ramped k6 health-check script was repeated. Original: 531 requests, p95 650.83 ms, 1 failure; retest: 559 requests, p95 434.51 ms, 0 failures. This is a **33.24% lower observed p95**. Activity history showed **no new scale-out event**; therefore, the policy's causal performance benefit was **not isolated as a causal effect**. This AWS configuration change is distinct from the rejected local `synchronous_commit=off` experiment. See [CloudWatch analysis](../cloudwatch/cloudwatch-analysis.md) for screenshots, metrics and caveats.
+
+The retest CloudWatch screenshot is included in `evidence/cloudwatch/`. The original machine-generated retest output and JSON summary are held separately on the student's laptop and can be added to the same evidence directory.
+
+
 ## Conclusion
 
-The screenshots support **simulated successful request routing at several configured load levels** and a **predicted database contention risk**. They do not satisfy the rubric's strongest requirement of a **CloudWatch-proven bottleneck, production-safe applied fix, and equivalent retest**. The local experiment below is not an AWS deployment fix. The platform's actual peak-load capacity remains unverified.
-
+The screenshots support **simulated successful request routing at several configured load levels** and a **predicted database contention risk**. The later real-AWS CloudWatch investigation, CPU target-tracking configuration and matched-script retest are documented in [`cloudwatch-analysis.md`](../cloudwatch/cloudwatch-analysis.md). The local database experiment remains a separate isolated test and was not deployed to AWS.
 

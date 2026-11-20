@@ -1,28 +1,18 @@
-# Assignment 3 — Final Evidence Checklist
+# Evidence index and assessment traceability
 
-This checklist distinguishes **observed evidence**, **estimates**, and **unverified requirements**.
+This index maps the five assessment areas to the actual source records and reports. It is a navigation aid, not a replacement for the main report.
 
-| Requirement | Evidence | Status |
+| Assessment area | Report section | Principal evidence |
 |---|---|---|
-| Revised architecture and changes | `architecture/screenshots/final-revised-architecture-a3.png`; `architecture/change-log.md` | Documented |
-| AWS services and justification | `docs/services.md`; `docs/cost-report.md` | Documented |
-| Normal/exam monthly and annual costs | `docs/cost-report.md`; calculator CSVs and PNGs in `evidence/cost-calculator/` | Partial baseline: $83.09 normal, $138.71 exam, $1,108.32 annual |
-| Three cost optimizations | EC2 Savings Plan, PrivateLink scenario, S3 lifecycle CSVs/PNGs | Estimated; NAT/PrivateLink not equivalent |
-| Singapore/Mumbai comparison | Calculator and Bhutan-origin ping evidence | Documented; browser latency is not an SLA |
-| Four failure scenarios | `infra/failure-scenarios.md`; `evidence/failure-tests/` | Four successful modeled HTTP traces |
-| Simulator load scenarios | `evidence/load-tests/` | Simulator settings, not measured sustained throughput |
-| Real local load and database investigation | `evidence/load-tests/load-test-report.md`; `evidence/local-load-test/` | k6 tests completed; WAL waits observed |
-| Measured optimization experiment | `evidence/local-load-test/08-wal-experiment-results.png` | Improved one local run, **rejected for production** |
-| CloudWatch-proven bottleneck and safe fix/retest | No verified benchmark | **Outstanding gap** |
-| 3,000 exam starts within five minutes | No end-to-end proof | **Outstanding gap** |
-| RPO ≤ 5 minutes / RTO ≤ 1 hour | Simulated failover paths only | **Not measured** |
-| Five-year retention | Proposed S3 lifecycle | **Not fully validated** |
-| Terraform/AWS baseline | `terraform/`, `evidence/terraform/`, `evidence/aws-baseline/` | Supporting artifacts; plan is not proof of deployment |
+| Revised architecture and design rationale | [Final report §2](assignment3-final-report.md) | `architecture/screenshots/final-revised-architecture-a3.png`, `architecture/change-log.md` |
+| Services, feasibility and trade-offs | [Final report §3](assignment3-final-report.md) | `docs/cost-report.md`, `evidence/cost-calculator/` CSV exports and screenshots, Bhutan ping screenshots |
+| Cost estimates and three optimization scenarios | [Final report §3](assignment3-final-report.md) | Normal/exam-month exports, Savings Plan, NAT/PrivateLink and S3 lifecycle evidence |
+| Four failure simulations and recovery assessment | [Final report §4](assignment3-final-report.md) | `infra/failure-scenarios.md`, `evidence/failure-tests/` screenshots |
+| Performance, bottleneck investigation and retest | [Final report §5](assignment3-final-report.md) | `evidence/load-tests/`, `evidence/local-load-test/`, `evidence/cloudwatch/` and `cloudwatch-analysis.md` |
 
-## Submission notes
+## Submission evidence notes
 
-- AWS Pricing Calculator figures are **partial estimates**, not actual billing or complete two-AZ total cost.
-- Architecture Lab **$281.57/month** and calculator **$83.09/month** are different modeled scopes.
-- A modeled **134 ms request duration** is not recovery time.
-- `synchronous_commit=off` is **not a production recommendation** for exam answers.
-- Exclude credentials, generated student tokens, Terraform state and plan binaries, dependencies, and backups.
+- The November 20 AWS retest measured 559 requests, 0% failures and 434.51 ms p95. Its original terminal output and JSON summary are on the student's laptop and can be added under `evidence/cloudwatch/`.
+- The CPU target-tracking policy was configured at 50% CPU; the activity history did not show a scale-out during the two-minute retest.
+- Simulator recovery traces and local database tests should be interpreted within their respective environments.
+- Check the main report in VS Code Markdown Preview to view all embedded figures.
